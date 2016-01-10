@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TOTE Site by JasonTarka</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>TOTE Site</h1>
+        <p>Player &amp; Show management API &amp; Webpage for Theatre on the Edge</p>
+
+        <p class="view"><a href="https://github.com/JasonTarka/tote-site">View the Project on GitHub <small>JasonTarka/tote-site</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/JasonTarka/tote-site/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/JasonTarka/tote-site/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/JasonTarka/tote-site">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a id="environment-variables" class="anchor" href="#environment-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Environment Variables</h2>
+
+<h3>
+<a id="required" class="anchor" href="#required" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required</h3>
+
+<ul>
+<li><code>TOTE_DB_HOST</code></li>
+<li><code>TOTE_DB_DATABASE</code></li>
+<li><code>TOTE_DB_USER</code></li>
+<li><code>TOTE_DB_PASSWORD</code></li>
+<li><code>TOTE_JWT_SECRET</code></li>
+</ul>
+
+<h3>
+<a id="optional" class="anchor" href="#optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional</h3>
+
+<ul>
+<li>TOTE_SESSION_LENGTH_MINUTES</li>
+</ul>
+
+<h2>
+<a id="rest-api" class="anchor" href="#rest-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>REST API</h2>
+
+<p>These are subject to change, and are here for testing reference only.</p>
+
+<p>Organization/sorting will come later.</p>
+
+<h3>
+<a id="authentication" class="anchor" href="#authentication" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authentication</h3>
+
+<h4>
+<a id="post-apiauthlogin" class="anchor" href="#post-apiauthlogin" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>POST /api/auth/login</code>
+</h4>
+
+<p>Log in with your username &amp; password, and get a JSON Web Token to authenticate
+further requests.</p>
+
+<p><em>Example Body</em></p>
+
+<div class="highlight highlight-source-json"><pre>{
+    <span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>root<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>toor<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<p><em>Example Response</em></p>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>eyJ0eXAiOiJKV1QiLC...J9.eyJpZCI6...MH0.DAJ4y...OaLWc<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<h3>
+<a id="players" class="anchor" href="#players" aria-hidden="true"><span class="octicon octicon-link"></span></a>Players</h3>
+
+<h4>
+<a id="get-apiplayersplayer" class="anchor" href="#get-apiplayersplayer" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>GET /api/players/:player</code>
+</h4>
+
+<p>Fetch the information for an individual Player.</p>
+
+<p><code>:player</code> is the ID of the player to fetch</p>
+
+<p><em>Example Response</em></p>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-c1">74</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>John Doe<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>email<span class="pl-pds">"</span></span>: <span class="pl-c1">null</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>bio<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>This person has nothing witty to say yet.<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<h4>
+<a id="get-apiplayers" class="anchor" href="#get-apiplayers" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>GET /api/players/</code>
+</h4>
+
+<p>Fetch a list of all active Players.</p>
+
+<h3>
+<a id="users" class="anchor" href="#users" aria-hidden="true"><span class="octicon octicon-link"></span></a>Users</h3>
+
+<h4>
+<a id="get-apiusersuser-authenticated" class="anchor" href="#get-apiusersuser-authenticated" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>GET /api/users/:user</code> (Authenticated)</h4>
+
+<p>Fetch the information for an individual User.</p>
+
+<p><code>:user</code> is the ID of the User to fetch</p>
+
+<p><em>Example Response</em></p>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-c1">258</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>John.Doe<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>playerId<span class="pl-pds">"</span></span>: <span class="pl-c1">74</span>
+}</pre></div>
+
+<h4>
+<a id="post-apiusers-authenticated" class="anchor" href="#post-apiusers-authenticated" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>POST /api/users</code> (Authenticated)</h4>
+
+<p>Create a new User.</p>
+
+<p><em>Example Body</em></p>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>John.Doe<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>playerId<span class="pl-pds">"</span></span>: <span class="pl-c1">74</span>,
+  <span class="pl-s"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>your new password<span class="pl-pds">"</span></span>
+}</pre></div>
+
+<p><em>Response</em>
+Responds with a User object representing the newly created User</p>
+
+<h4>
+<a id="get-apiusers-authenticated" class="anchor" href="#get-apiusers-authenticated" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>GET /api/users/</code> (Authenticated)</h4>
+
+<p>Get a list of all active Users.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/JasonTarka">JasonTarka</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
