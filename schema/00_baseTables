@@ -1,0 +1,52 @@
+-- This is creating the database as it was when I inherited the TotE website.
+-- It is not a good database design.
+-- I'm only including it here for anyone who's installing this casting software
+-- on their own site so they can use the upgrade scripts.
+
+CREATE TABLE IF NOT EXISTS `players` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `email` varchar(128) DEFAULT NULL,
+  `website` varchar(128) DEFAULT NULL,
+  `bio` text,
+  `imgpath` varchar(255) DEFAULT NULL,
+  `settings` int(11) NOT NULL DEFAULT '7',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `locations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `shows` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `timestamp` date NOT NULL DEFAULT '0000-00-00',
+  `tagline` varchar(128) DEFAULT NULL,
+  `locationid` int(11) DEFAULT NULL,
+  `hostid` int(11) DEFAULT NULL,
+  `musicid` int(11) DEFAULT NULL,
+  `lightsid` int(11) DEFAULT NULL,
+  `fohid` int(11) DEFAULT NULL,
+  `prodid` int(11) DEFAULT NULL,
+  `soundid` int(11) DEFAULT NULL,
+  `p0id` int(11) DEFAULT NULL,
+  `p1id` int(11) DEFAULT NULL,
+  `p2id` int(11) DEFAULT NULL,
+  `p3id` int(11) DEFAULT NULL,
+  `p4id` int(11) DEFAULT NULL,
+  `p5id` int(11) DEFAULT NULL,
+  `p6id` int(11) DEFAULT NULL,
+  `p7id` int(11) DEFAULT NULL,
+  `p8id` int(11) DEFAULT NULL,
+  `p9id` int(11) DEFAULT NULL,
+  `pAid` int(11) DEFAULT NULL,
+  `pBid` int(11) DEFAULT NULL,
+  `pCid` int(11) DEFAULT NULL,
+  `pDid` int(11) DEFAULT NULL,
+  `pEid` int(11) DEFAULT NULL,
+  `pFid` int(11) DEFAULT NULL,
+  `settings` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
