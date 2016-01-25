@@ -43,13 +43,14 @@ class PlayerProvider {
 	}
 
 	createPlayer( player ) {
-		let sql = 'INSERT INTO players(name, email, bio, imgPath) ' +
-				  'VALUES(?, ?, ?, ?)',
+		let sql = `INSERT INTO players(name, email, bio, imgPath, isActive)
+				  VALUES(?, ?, ?, ?, ?)`,
 			values = [
 				player.name,
 				player.email,
 				player.bio,
-				player.imgPath
+				player.imgPath,
+				player.isActive
 			];
 
 		return this._db.executeInsert( sql, values )
@@ -81,9 +82,10 @@ function createPlayer( row ) {
 	let player = new Player(
 		row.id,
 		row.name,
-		row.email,
-		row.bio,
-		row.imgPath
+		row.email || null,
+		row.bio || null,
+		row.imgPath || null,
+		!!row.isActive
 	);
 	return player;
 }

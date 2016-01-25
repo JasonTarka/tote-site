@@ -30,10 +30,7 @@ class PlayerController {
 		return data.user.hasPermission( permissions.ManagePlayers )
 			.then( () => {
 				let player = new Player();
-				player.name = body.name;
-				player.email = body.email;
-				player.bio = body.bio;
-				player.imgPath = body.imgPath;
+				player.updateFieldVals( body );
 
 				return this._provider.createPlayer( player );
 			} );
@@ -46,10 +43,7 @@ class PlayerController {
 		return data.user.hasPermission( permissions.ManagePlayers )
 			.then( () => this._provider.fetchPlayer( playerId ) )
 			.then( player => {
-				player.name = body.name || player.name;
-				player.email = body.email || player.email;
-				player.bio = body.bio || player.bio;
-				player.imgPath = body.imgPath || player.imgPath;
+				player.updateFieldVals( body );
 				return player.save();
 			} );
 	}

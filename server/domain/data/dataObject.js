@@ -44,6 +44,33 @@ class DataObject {
 		throw new NotImplemented();
 	}
 
+	/**
+	 * An array containing all fields this object contains.
+	 * @returns {string[]}
+	 */
+	get fieldNames() {
+		return Object.keys( _data.get(this) );
+	}
+
+	/**
+	 * Update field values in this object using the matching fields from a
+	 * hash-object.
+	 *
+	 * @param data {Object}
+	 */
+	updateFieldVals( data ) {
+		let idFields = this.identifierFields;
+
+		this.fieldNames
+			.filter(
+				x =>  data.hasOwnProperty(x)
+					  && idFields.indexOf( x ) < 0
+			)
+			.forEach(
+				field => this[field] = data[field]
+			);
+	}
+
 	/***** Private/Protected methods *****/
 
 	_markDirty( field ) {

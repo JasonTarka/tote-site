@@ -5,13 +5,14 @@ let DataObject = require( './dataObject' ),
 	playerProvider = require( '../providers/player.provider' );
 
 class Player extends DataObject {
-	constructor( id, name, email, bio, imgPath ) {
+	constructor( id, name, email, bio, imgPath, isActive ) {
 		super( {
 			id: id,
 			name: name,
 			email: email,
 			bio: bio,
-			imgPath: imgPath
+			imgPath: imgPath,
+			isActive: isActive
 		} );
 	}
 
@@ -74,6 +75,24 @@ class Player extends DataObject {
 	set imgPath( val ) {
 		val = val ? val.toString() : null;
 		this._setFieldVal( 'imgPath', val );
+	}
+
+	// ----- imgPath -----
+
+	get isActive() {
+		return this._getFieldVal( 'isActive' );
+	}
+
+	set isActive( val ) {
+		if( val === false || val === 0 || val === '0' || val === 'false' ) {
+			val = false;
+		} else if( val === true || val === 1 || val === '1' || val === 'true' ) {
+			val = true;
+		} else {
+			throw new InvalidParameter( 'isActive must be a boolean' );
+		}
+
+		this._setFieldVal( 'isActive', val );
 	}
 
 	save() {

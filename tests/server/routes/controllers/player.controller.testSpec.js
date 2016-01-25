@@ -10,13 +10,14 @@ let should = require( 'should' ),
 
 require( 'should-sinon' );
 
-describe.only( 'Player Controller', () => {
+describe( 'Player Controller', () => {
 	const playerId = 21,
 		playerName = 'Joe Namith',
 		playerEmail = 'joe.namith@example.com',
 		playerBio = 'oseph William Namath, nicknamed "Broadway Joe", is a former' +
 					' American football quarterback and actor.',
-		playerImgPath = '/path/to/image.png';
+		playerImgPath = '/path/to/image.png',
+		playerIsActive = true;
 
 
 	var PlayerController,
@@ -39,7 +40,14 @@ describe.only( 'Player Controller', () => {
 	} );
 
 	beforeEach( () => {
-		player = new Player( playerId, playerName, playerEmail, playerBio, playerImgPath );
+		player = new Player(
+			playerId,
+			playerName,
+			playerEmail,
+			playerBio,
+			playerImgPath,
+			playerIsActive
+		);
 		user = new UserMock();
 
 		playerProviderMock = new PlayerProviderMock();
@@ -57,7 +65,8 @@ describe.only( 'Player Controller', () => {
 				name: player.name,
 				email: player.email,
 				bio: player.bio,
-				imgPath: player.imgPath
+				imgPath: player.imgPath,
+				isActive: player.isActive
 			}
 		};
 
@@ -101,7 +110,8 @@ describe.only( 'Player Controller', () => {
 				bio: 'James Naismith (November 6, 1861 – November 28, 1939) was' +
 					 ' a Canadian-American physical educator, physician,' +
 					 ' chaplain, sports coach and innovator.',
-				imgPath: '/path/to/joe.png'
+				imgPath: '/path/to/joe.png',
+				isActive: false
 			};
 
 			sinon.stub( player, 'save', () => {
@@ -109,6 +119,7 @@ describe.only( 'Player Controller', () => {
 				player.email.should.equal( data.body.email );
 				player.bio.should.equal( data.body.bio );
 				player.imgPath.should.equal( data.body.imgPath );
+				player.isActive.should.be.false();
 			} );
 
 			controller.update( data )
@@ -126,7 +137,8 @@ describe.only( 'Player Controller', () => {
 				{prop: 'name', value: 'Yoda'},
 				{prop: 'email', value: 'yoda@example.org'},
 				{prop: 'bio', value: 'A Jedi on a far away planet'},
-				{prop: 'imgPath', value: '/path/to/another.jpeg'}
+				{prop: 'imgPath', value: '/path/to/another.jpeg'},
+				{prop: 'isActive', value: false}
 			].forEach( x =>
 				it( 'only updates changed property, ' + x.prop, done => {
 					data.body = {};
@@ -144,6 +156,9 @@ describe.only( 'Player Controller', () => {
 						);
 						player.imgPath.should.equal(
 							data.body.imgPath || player.imgPath
+						);
+						player.isActive.should.equal(
+							data.body.isActive === undefined
 						);
 					} );
 
@@ -168,7 +183,8 @@ describe.only( 'Player Controller', () => {
 				name: 'David Bowie',
 				email: 'david.bowie@example.io',
 				bio: 'Trapped in a tin can',
-				imgPath: '/path/to/bowie.space'
+				imgPath: '/path/to/bowie.space',
+				isActive: true
 			};
 			player = null;
 
@@ -182,6 +198,7 @@ describe.only( 'Player Controller', () => {
 				newPlayer.email.should.equal( data.body.email );
 				newPlayer.bio.should.equal( data.body.bio );
 				newPlayer.imgPath.should.equal( data.body.imgPath );
+				newPlayer.isActive.should.equal( data.body.isActive );
 
 				return newPlayer;
 			} );
