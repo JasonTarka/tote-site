@@ -1,22 +1,21 @@
 'use strict';
+import {Database} from "./database";
+import {User} from "../data/user";
 
-module.exports = construct;
-
-let database = require( './database' ),
-	singleton = require( '../../utils/utils' ).singleton,
+let singleton = require( '../../utils/utils' ).singleton,
 	errors = require( '../../utils/errors' ),
-	User = require( '../data/user' ),
 	Permission = require( '../data/permission' );
 
 class UserProvider {
-	constructor() {
-		this._db = database();
+
+	private get _db(): Database {
+		return Database.instance;
 	}
 
 	/**
 	 * @param user {User}
 	 */
-	createUser( user ) {
+	createUser( user:User ) {
 		let sql = 'INSERT INTO users(username, password, salt, playerId) ' +
 				  'VALUES(?, ?, ?, ?)',
 			values = [user.username, user.password, user.salt, user.playerId];
@@ -107,6 +106,6 @@ function createPermission( row ) {
 /**
  * @returns {UserProvider}
  */
-function construct() {
+export function construct() {
 	return singleton( UserProvider );
 }

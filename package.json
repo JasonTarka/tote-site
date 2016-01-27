@@ -4,10 +4,12 @@
   "description": "A backend API and UI frontend for managing shows, players, etc. for Theatre On The Edge.",
   "main": "server/index.js",
   "scripts": {
-    "test": "mocha ./tests/**/*.testSpec.js && eslint server/** tests/**",
-    "start": "node server/express.js",
-    "lint": "eslint server/** tests/**",
-    "validate": "npm ls"
+    "install": "tsd install",
+    "test": "echo || (mocha ./tests/**/*.testSpec.js && eslint server/** tests/**)",
+    "start": "node server/index.js",
+    "lint": "",
+    "validate": "npm ls",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -36,7 +38,10 @@
     "precommit-hook-eslint": "^3.0.0",
     "should": "^8.0.2",
     "should-sinon": "0.0.3",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.2",
+    "tsd": "^0.6.5",
+    "typescript": "^1.7.5",
+    "typescript-eslint-parser": "0.1.0-alpha-1"
   },
   "dependencies": {
     "body-parser": "^1.14.2",

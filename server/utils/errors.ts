@@ -1,8 +1,16 @@
 'use strict';
 
+class HttpError extends Error {
+	constructor( message ) {
+		super( message );
+	}
+
+	status: number;
+}
+
 /***** 4xx *****/
 
-class BadRequest extends Error {
+export class BadRequest extends HttpError {
 	constructor( message ) {
 		super( message || 'Bad Request Parameters' );
 		this.name = 'Bad Request';
@@ -10,13 +18,13 @@ class BadRequest extends Error {
 	}
 }
 
-class InvalidParameter extends BadRequest {
+export class InvalidParameter extends BadRequest {
 	constructor( message ) {
 		super( message || 'Invalid Parameter' );
 	}
 }
 
-class NotAuthorized extends Error {
+export class NotAuthorized extends HttpError {
 	constructor( message ) {
 		super( message || 'Not Authorized' );
 		this.name = 'Not Authorized';
@@ -24,7 +32,7 @@ class NotAuthorized extends Error {
 	}
 }
 
-class Forbidden extends Error {
+export class Forbidden extends HttpError {
 	constructor( message ) {
 		super( message || 'Forbidden' );
 		this.name = 'Forbidden';
@@ -32,7 +40,7 @@ class Forbidden extends Error {
 	}
 }
 
-class NotFound extends Error {
+export class NotFound extends HttpError {
 	constructor( message ) {
 		super( message || 'Not Found' );
 		this.name = 'Not Found';
@@ -42,7 +50,7 @@ class NotFound extends Error {
 
 /***** 5xx *****/
 
-class InternalServerError extends Error {
+export class InternalServerError extends HttpError {
 	constructor( message ) {
 		super( message );
 		this.name = 'Internal Server Error';
@@ -54,7 +62,7 @@ class InternalServerError extends Error {
  * For when a function has not been implemented, or correctly overridden.
  * Should never reach the user, but results in a generic 500 error.
  */
-class FunctionNotImplemented extends InternalServerError {
+export class FunctionNotImplemented extends InternalServerError {
 	constructor( message ) {
 		super( message || 'Function not implemented' );
 	}
@@ -64,20 +72,9 @@ class FunctionNotImplemented extends InternalServerError {
  * For when a feature has not been implemented in the API.
  * Specifically a 501 error.
  */
-class FeatureNotImplemented extends InternalServerError {
+export class FeatureNotImplemented extends InternalServerError {
 	constructor( message ) {
 		super( message || 'Not Implemented' );
 		this.status = 501;
 	}
 }
-
-module.exports = {
-	BadRequest: BadRequest,
-	NotAuthorized: NotAuthorized,
-	Forbidden: Forbidden,
-	NotFound: NotFound,
-
-	InvalidParameter: InvalidParameter,
-	FunctionNotImplemented: FunctionNotImplemented,
-	FeatureNotImplemented: FeatureNotImplemented
-};

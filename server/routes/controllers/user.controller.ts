@@ -6,11 +6,7 @@ let RoutingInfo = require( '../data/routingInfo' ),
 	User = require( '../../domain/data/user' ),
 	permissions = require( '../../utils/enums' ).permissions;
 
-module.exports = construct;
-
 class UserController {
-	constructor() {
-	}
 
 	/**
 	 * @returns {UserProvider}
@@ -69,6 +65,6 @@ class UserController {
 	}
 }
 
-function construct() {
+export function construct() {
 	return require( '../../utils/utils' ).singleton( UserController );
 }

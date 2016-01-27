@@ -1,16 +1,15 @@
 'use strict';
+import {Database} from "./database";
 
-module.exports = construct;
-
-let database = require( './database' ),
-	singleton = require( '../../utils/utils' ).singleton,
+let singleton = require( '../../utils/utils' ).singleton,
 	errors = require( '../../utils/errors' ),
 	tools = require( './providerTools' ),
 	Player = require( '../data/player' );
 
-class PlayerProvider {
-	constructor() {
-		this._db = database();
+export class PlayerProvider {
+
+	private get _db(): Database {
+		return Database.instance;
 	}
 
 	fetchPlayers() {

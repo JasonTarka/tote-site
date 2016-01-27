@@ -1,3 +1,4 @@
+import {Router} from "express";
 'use strict';
 
 let express = require( 'express' ),
@@ -22,13 +23,13 @@ app.use( ( req, res, next ) => {
 } );
 
 // General error handler
-app.use( ( err, req, res, next ) => { // eslint-disable-line no-unused-vars
+app.use( ( err: any, req, res, next ) => { // eslint-disable-line no-unused-vars
 	/* eslint-disable no-console */
 	console.error( err.message );
 	console.error( err.stack );
 	/* eslint-enable no-console */
 
-	var ret = {
+	var ret: any = {
 		error: err.name,
 		reason: err.message
 	};

@@ -2,4 +2,8 @@ node_modules
 .idea/workspace.xml
 .idea/dictionaries
 npm-debug.log
+typings
+bin
+server/**/*.js
+server/**/*.js.map
 

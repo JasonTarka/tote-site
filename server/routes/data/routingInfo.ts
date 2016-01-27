@@ -1,8 +1,7 @@
 'use strict';
+import {Route} from "./route";
 
-let Route = require( './route' );
-
-class RoutingInfo {
+export class RoutingInfo {
 	constructor( baseRoute, routes ) {
 		if( typeof baseRoute !== 'string' ) {
 			throw new Error( '"basePath" is not valid' );
@@ -21,18 +20,13 @@ class RoutingInfo {
 			}
 		}
 
-		/** @type {string} */
 		this.baseRoute = baseRoute.startsWith( '/' )
 			? baseRoute
 			: '/' + baseRoute;
 
-
-		/**@type {Route[]} */
 		this.routes = routes;
 	}
-}
 
-/**
- * @type {RoutingInfo}
- */
-module.exports = RoutingInfo;
+	baseRoute:string;
+	routes:Route[];
+}

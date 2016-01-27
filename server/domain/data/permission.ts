@@ -1,14 +1,11 @@
 'use strict';
-
-var DataObject = require( './dataObject' );
+import {DataObject} from './dataObject';
 
 let _data = new WeakMap();
 
-class Permission extends DataObject {
+export class Permission extends DataObject {
 	constructor( id, name ) {
-		super();
-
-		_data.set( this, {
+		super( {
 			id: id,
 			name: name
 		} );
@@ -22,12 +19,10 @@ class Permission extends DataObject {
 	}
 
 	get id() {
-		return _data.get( this ).id;
+		return this._getFieldVal( 'id' );
 	}
 
 	get name() {
-		return _data.get( this ).name;
+		return this._getFieldVal( 'name' );
 	}
 }
-
-module.exports = Permission;

@@ -1,6 +1,5 @@
 'use strict';
-
-module.exports = construct;
+import {PlayerProvider} from "../../domain/providers/player.provider";
 
 let RoutingInfo = require( '../data/routingInfo' ),
 	Route = require( '../data/route' ),
@@ -10,8 +9,9 @@ let RoutingInfo = require( '../data/routingInfo' ),
 
 
 class PlayerController {
-	constructor() {
-		this._provider = playerProvider();
+
+	private get _provider():PlayerProvider {
+		return playerProvider();
 	}
 
 	list() {
@@ -75,6 +75,6 @@ class PlayerController {
 	}
 }
 
-function construct() {
+export function construct() {
 	return require( '../../utils/utils' ).singleton( PlayerController );
 }

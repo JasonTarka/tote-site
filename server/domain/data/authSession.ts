@@ -2,7 +2,7 @@
 
 let authProvider = require( '../providers/auth.provider' );
 
-class AuthSession {
+export class AuthSession {
 	constructor( userId, sessionKey, dateCreated, validUntil, lastUsed ) {
 		this.userId = userId;
 		this.sessionKey = sessionKey;
@@ -11,7 +11,13 @@ class AuthSession {
 		this.lastUsed = new Date( lastUsed );
 	}
 
-	get isValid() {
+	userId: number;
+	sessionKey: string;
+	dateCreated: Date;
+	validUntil: Date;
+	lastUsed: Date;
+
+	get isValid(): boolean {
 		let now = new Date();
 		return now < this.validUntil;
 	}
@@ -20,8 +26,3 @@ class AuthSession {
 		authProvider().markAuthSessionUsed( this.userId, this.sessionKey );
 	}
 }
-
-/**
- * @type {AuthSession}
- */
-module.exports = AuthSession;

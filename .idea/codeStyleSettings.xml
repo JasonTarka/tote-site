@@ -3,11 +3,15 @@
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
+        <option name="LINE_SEPARATOR" value="&#10;" />
         <option name="RIGHT_MARGIN" value="80" />
         <JSCodeStyleSettings>
           <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
           <option name="USE_DOUBLE_QUOTES" value="false" />
         </JSCodeStyleSettings>
+        <TypeScriptCodeStyleSettings>
+          <option name="SPACE_BEFORE_FUNCTION_LEFT_PARENTH" value="false" />
+        </TypeScriptCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
@@ -40,6 +44,38 @@
           <option name="FOR_BRACE_FORCE" value="3" />
           <indentOptions>
             <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+        <codeStyleSettings language="TypeScript">
+          <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+          <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="true" />
+          <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
+          <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_METHOD_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_IF_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_WHILE_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_FOR_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_CATCH_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_SWITCH_PARENTHESES" value="true" />
+          <option name="SPACE_BEFORE_IF_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_WHILE_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_FOR_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
+          <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
+          <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+          <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+          <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="5" />
+          <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
+          <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
+          <option name="WRAP_COMMENTS" value="true" />
+          <option name="IF_BRACE_FORCE" value="1" />
+          <option name="DOWHILE_BRACE_FORCE" value="3" />
+          <option name="WHILE_BRACE_FORCE" value="3" />
+          <option name="FOR_BRACE_FORCE" value="3" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+            <option name="SMART_TABS" value="true" />
           </indentOptions>
         </codeStyleSettings>
       </value>

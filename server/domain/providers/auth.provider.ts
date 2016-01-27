@@ -1,11 +1,9 @@
 'use strict';
+import {AuthSession} from "../data/authSession";
+import {Database} from "./database";
 
-module.exports = construct;
-
-let database = require( './database' ),
-	utils = require( '../../utils/utils' ),
-	errors = require( '../../utils/errors' ),
-	AuthSession = require( '../data/authSession' );
+let utils = require( '../../utils/utils' ),
+	errors = require( '../../utils/errors' );
 
 const SESSION_KEY_LENGTH = 20;
 
@@ -16,12 +14,10 @@ class AuthProvider {
 			: 300;
 	}
 
-	/**
-	 * @returns {Database}
-	 * @private
-	 */
-	get _db() {
-		return database();
+	private _sessionLength: number;
+
+	private get _db(): Database {
+		return Database.instance;
 	}
 
 	get _newValidUntilDate() {
@@ -57,7 +53,7 @@ class AuthProvider {
 	 * @param sessionKey
 	 * @returns {Promise.<AuthSession>}
 	 */
-	fetchAuthSession( userId, sessionKey ) {
+	fetchAuthSession( userId, sessionKey ): Promise<AuthSession> {
 		let sql = 'SELECT userId, sessionKey, dateCreated, ' +
 				  'validUntilDate, lastUsedDate' +
 				  ' FROM user_auth_sessions' +
@@ -66,7 +62,7 @@ class AuthProvider {
 			params = [userId, sessionKey];
 
 		return this._db.executeQuery( sql, params )
-			.then( rows => {
+			.then( (rows: any[]) => {
 				if( !rows || !rows.length ) {
 					throw new errors.Forbidden();
 				}
@@ -104,6 +100,6 @@ function createAuthSession( row ) {
 /**
  * @returns {AuthProvider}
  */
-function construct() {
+export function construct() {
 	return utils.singleton( AuthProvider );
 }

@@ -1,15 +1,11 @@
 'use strict';
 
-module.exports = {
-	generateUpdateStatement: generateUpdateStatement
-};
-
 /**
  * @param dataObject {DataObject}
  * @param tableName {string}
  * @returns {object}
  */
-function generateUpdateStatement(
+export function generateUpdateStatement(
 	dataObject,
 	tableName
 ) {

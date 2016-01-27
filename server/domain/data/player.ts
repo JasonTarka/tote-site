@@ -1,10 +1,10 @@
 'use strict';
+import {DataObject} from './dataObject';
 
-let DataObject = require( './dataObject' ),
-	InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
+let InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
 	playerProvider = require( '../providers/player.provider' );
 
-class Player extends DataObject {
+export class Player extends DataObject {
 	constructor( id, name, email, bio, imgPath, isActive ) {
 		super( {
 			id: id,
@@ -104,8 +104,3 @@ class Player extends DataObject {
 			.then( () => this );
 	}
 }
-
-/**
- * @type {Player}
- */
-module.exports = Player;

@@ -1,19 +1,18 @@
 'use strict';
 
-let NotImplemented = require( '../../utils/errors' ).FunctionNotImplemented,
-	utils = require( '../../utils/utils' );
+let NotImplemented = require( '../../utils/errors' ).NotImplemented,
+	utils =require( '../../utils/utils' );
 
 let _data = new WeakMap();
 
-class DataObject {
+export class DataObject {
 	constructor( data ) {
-		/**
-		 * @type {Set}
-		 */
 		this.dirtyFields = new Set();
 
 		_data.set( this, data );
 	}
+
+	dirtyFields: Set<string>;
 
 	markClean() {
 		this.dirtyFields = new Set();
@@ -22,7 +21,7 @@ class DataObject {
 	/**
 	 * @returns {boolean}
 	 */
-	get isDirty() {
+	get isDirty(): boolean {
 		return !!this.dirtyFields.size;
 	}
 
@@ -31,7 +30,7 @@ class DataObject {
 	/**
 	 * @returns {Object|object}
 	 */
-	get data() {
+	get data(): Object {
 		throw new NotImplemented();
 	}
 
@@ -40,7 +39,7 @@ class DataObject {
 	 * eg: primary keys in the database
 	 * @returns {string[]}
 	 */
-	get identifierFields() {
+	get identifierFields(): string[] {
 		throw new NotImplemented();
 	}
 
@@ -48,7 +47,7 @@ class DataObject {
 	 * An array containing all fields this object contains.
 	 * @returns {string[]}
 	 */
-	get fieldNames() {
+	get fieldNames(): string[] {
 		return Object.keys( _data.get(this) );
 	}
 
@@ -58,8 +57,8 @@ class DataObject {
 	 *
 	 * @param data {Object}
 	 */
-	updateFieldVals( data ) {
-		let idFields = this.identifierFields;
+	updateFieldVals( data: Object ) {
+		let idFields: string[] = this.identifierFields;
 
 		this.fieldNames
 			.filter(
@@ -73,21 +72,21 @@ class DataObject {
 
 	/***** Private/Protected methods *****/
 
-	_markDirty( field ) {
+	_markDirty( field: string ) {
 		if( !this.dirtyFields.has( field ) ) {
 			this.dirtyFields.add( field );
 		}
 	}
 
-	_getFieldVal( field ) {
+	_getFieldVal( field: string ) {
 		return _data.get( this )[field];
 	}
 
-	_getFieldVals() {
+	_getFieldVals():Object  {
 		return utils.clone( _data.get( this ) );
 	}
 
-	_setFieldVal( field, value ) {
+	_setFieldVal( field: string, value ) {
 		let data = _data.get( this );
 		if( data[field] === value ) {
 			return;
@@ -97,5 +96,3 @@ class DataObject {
 		this._markDirty( field );
 	}
 }
-
-module.exports = DataObject;

@@ -1,16 +1,10 @@
 'use strict';
 
-module.exports = {
-	singleton: singleton,
-	clone: clone,
-	generateRandomString: generateRandomString,
-	setToArray: setToArray
-};
+import crypto = require( 'crypto' );
 
-let crypto = require( 'crypto' );
+export function singleton( type ) {
+	var self: any = singleton;
 
-function singleton( type ) {
-	var self = singleton;
 	if( !self.instances ) {
 		self.instances = new WeakMap();
 	}
@@ -25,7 +19,7 @@ function singleton( type ) {
 	return self.instances.get( type );
 }
 
-function clone( obj ) {
+export function clone( obj ) {
 	var copy;
 
 	if( obj == null || typeof obj !== 'object' ) {
@@ -54,14 +48,14 @@ function clone( obj ) {
 	return copy;
 }
 
-function generateRandomString( maxLength ) {
+export function generateRandomString( maxLength ) {
 	let length = Math.floor( maxLength / 2 );
 
 	return crypto.randomBytes( length )
 		.toString( 'hex' );
 }
 
-function setToArray( set ) {
+export function setToArray( set ) {
 	if( !(set instanceof Set) ) {
 		throw new Error( 'Not a set' );
 	}

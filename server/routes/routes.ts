@@ -1,4 +1,5 @@
 'use strict';
+import {Router} from "express";
 
 let express = require( 'express' ),
 	util = require( 'util' ), // Node's util
@@ -6,9 +7,7 @@ let express = require( 'express' ),
 	DataObject = require( '../domain/data/dataObject' ),
 	authenticate = require( './auth' );
 
-let app = express();
-
-module.exports = app;
+export var app: Router = express.Router();
 
 let controllers = [
 	require( './controllers/auth.controller' )(),

@@ -1,7 +1,7 @@
 'use strict';
+import {DataObject} from "./dataObject";
 
-let DataObject = require( './dataObject' ),
-	InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
+let InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
 	passwordUtils = require( '../../utils/password' ),
 	utils = require( '../../utils/utils' ),
 	userProvider = require( '../providers/user.provider' ),
@@ -12,7 +12,7 @@ const MIN_PASSWORD_LENGTH = 8,
 
 let _permissions = new WeakMap();
 
-class User extends DataObject {
+export class User extends DataObject {
 	constructor( id, username, password, salt, playerId ) {
 		super( {
 			id: id,
@@ -24,23 +24,23 @@ class User extends DataObject {
 	}
 
 	get data() {
-		let data = this._getFieldVals();
+		let data: any = this._getFieldVals();
 		delete data.password;
 		delete data.salt;
 		return data;
 	}
 
 	// ----- id -----
-	get id() {
+	get id(): number {
 		return this._getFieldVal( 'id' );
 	}
 
 	// ----- username -----
-	get username() {
+	get username(): string {
 		return this._getFieldVal( 'username' );
 	}
 
-	set username( val ) {
+	set username( val: string ) {
 		if( !val ) {
 			throw new InvalidParameter( '"username" must not be empty' );
 		}
@@ -55,7 +55,7 @@ class User extends DataObject {
 	}
 
 	// ----- password -----
-	get password() {
+	get password(): string {
 		return this._getFieldVal( 'password' );
 	}
 
@@ -78,12 +78,12 @@ class User extends DataObject {
 	}
 
 	// ----- salt -----
-	get salt() {
+	get salt(): string {
 		return this._getFieldVal( 'salt' );
 	}
 
 	// ----- player ID -----
-	get playerId() {
+	get playerId(): number {
 		return this._getFieldVal( 'playerId' );
 	}
 
@@ -123,8 +123,3 @@ class User extends DataObject {
 		} );
 	}
 }
-
-/**
- * @type {User}
- */
-module.exports = User;

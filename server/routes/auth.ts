@@ -6,9 +6,7 @@ let passport = require( 'passport' ),
 	authProvider = require( '../domain/providers/auth.provider' ),
 	userProvider = require( '../domain/providers/user.provider' );
 
-module.exports = createAuthStrategy();
-
-function createAuthStrategy() {
+export function createAuthStrategy() {
 	let options = {
 		secretOrKey: process.env.TOTE_JWT_SECRET
 	};

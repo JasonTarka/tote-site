@@ -1,12 +1,8 @@
 'use strict';
-module.exports = {
-	hash: hashPassword,
-	verify: verifyPassword
-};
 
 let scrypt = require( 'scrypt' );
 
-function hashPassword( password, salt ) {
+export function hashPassword( password, salt ) {
 	const MAX_TIME = 0.9; // Maximum time to spend hashing (in seconds)
 
 	password = saltPassword( password, salt );
@@ -18,7 +14,7 @@ function hashPassword( password, salt ) {
 	return hash;
 }
 
-function verifyPassword( hash, password, salt ) {
+export function verifyPassword( hash, password, salt ) {
 	if( typeof hash === 'string' ) {
 		hash = new Buffer( hash, 'base64' );
 	} else if( !(hash instanceof Buffer) ) {

@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="TS Files" pattern="file[tote-site]:server//*.ts||file[tote-site]:tests//*.ts" />
+</component>

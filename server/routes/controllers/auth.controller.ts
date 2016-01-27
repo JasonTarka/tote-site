@@ -1,7 +1,5 @@
 'use strict';
 
-module.exports = construct;
-
 let jwt = require( 'jsonwebtoken' ),
 
 	RoutingInfo = require( '../data/routingInfo' ),
@@ -15,6 +13,8 @@ class AuthController {
 	constructor() {
 		this.jwtSecret = process.env.TOTE_JWT_SECRET;
 	}
+
+	private jwtSecret: string;
 
 	/**
 	 * @returns {UserProvider}
@@ -91,7 +91,7 @@ class AuthController {
 /**
  * @returns {AuthController}
  */
-function construct() {
+export var construct = function() {
 	return require( '../../utils/utils' ).singleton( AuthController );
-}
+};
 
