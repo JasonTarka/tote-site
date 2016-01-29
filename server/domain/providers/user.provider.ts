@@ -1,20 +1,15 @@
 'use strict';
 import {Database} from "./database";
+import {NotFound} from "../../utils/errors";
 import {User} from "../data/user";
+import {Permission} from "../data/permission";
 
-let singleton = require( '../../utils/utils' ).singleton,
-	errors = require( '../../utils/errors' ),
-	Permission = require( '../data/permission' );
-
-class UserProvider {
+export class UserProvider {
 
 	private get _db(): Database {
 		return Database.instance;
 	}
 
-	/**
-	 * @param user {User}
-	 */
 	createUser( user:User ) {
 		let sql = 'INSERT INTO users(username, password, salt, playerId) ' +
 				  'VALUES(?, ?, ?, ?)',
@@ -44,7 +39,7 @@ class UserProvider {
 				.then( users => {
 					if( !users || users.length == 0 ) {
 						return reject(
-							new errors.NotFound( 'User not found' )
+							new NotFound( 'User not found' )
 						);
 					}
 					resolve( createUser( users[0] ) );
@@ -58,9 +53,8 @@ class UserProvider {
 	 * If no user is found then the promise will be resolved with {null}.
 	 *
 	 * @param username
-	 * @returns {Promise}
 	 */
-	tryFetchUserByUsername( username ) {
+	tryFetchUserByUsername( username ):Promise<User> {
 		let sql = 'SELECT * FROM users WHERE username = ? AND deleted = 0';
 
 		return new Promise( ( resolve, reject ) => {
@@ -101,11 +95,4 @@ function createPermission( row ) {
 		row.name
 	);
 	return permission;
-}
-
-/**
- * @returns {UserProvider}
- */
-export function construct() {
-	return singleton( UserProvider );
 }

@@ -1,14 +1,13 @@
 'use strict';
+import {DataObject} from "../data/dataObject";
 
-/**
- * @param dataObject {DataObject}
- * @param tableName {string}
- * @returns {object}
- */
 export function generateUpdateStatement(
-	dataObject,
-	tableName
-) {
+	dataObject:DataObject,
+	tableName:string
+):{
+	sql:string,
+	params:{}
+} {
 	if( !dataObject.isDirty ) {
 		return null;
 	}

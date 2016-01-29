@@ -1,7 +1,7 @@
 'use strict';
+import {FunctionNotImplemented} from "../../utils/errors";
 
-let NotImplemented = require( '../../utils/errors' ).NotImplemented,
-	utils =require( '../../utils/utils' );
+import {clone} from "../../utils/utils";
 
 let _data = new WeakMap();
 
@@ -18,34 +18,26 @@ export class DataObject {
 		this.dirtyFields = new Set();
 	}
 
-	/**
-	 * @returns {boolean}
-	 */
 	get isDirty(): boolean {
 		return !!this.dirtyFields.size;
 	}
 
 	/***** Methods/Properties to be overridden *****/
 
-	/**
-	 * @returns {Object|object}
-	 */
 	get data(): Object {
-		throw new NotImplemented();
+		throw new FunctionNotImplemented();
 	}
 
 	/**
 	 * An array of fields that are used as identifiers for this object.
 	 * eg: primary keys in the database
-	 * @returns {string[]}
 	 */
 	get identifierFields(): string[] {
-		throw new NotImplemented();
+		throw new FunctionNotImplemented();
 	}
 
 	/**
 	 * An array containing all fields this object contains.
-	 * @returns {string[]}
 	 */
 	get fieldNames(): string[] {
 		return Object.keys( _data.get(this) );
@@ -54,8 +46,6 @@ export class DataObject {
 	/**
 	 * Update field values in this object using the matching fields from a
 	 * hash-object.
-	 *
-	 * @param data {Object}
 	 */
 	updateFieldVals( data: Object ) {
 		let idFields: string[] = this.identifierFields;
@@ -83,7 +73,7 @@ export class DataObject {
 	}
 
 	_getFieldVals():Object  {
-		return utils.clone( _data.get( this ) );
+		return clone( _data.get( this ) );
 	}
 
 	_setFieldVal( field: string, value ) {

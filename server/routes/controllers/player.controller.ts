@@ -1,17 +1,16 @@
 'use strict';
+import {Permissions} from "../../utils/enums";
+import {Player} from "../../domain/data/player";
 import {PlayerProvider} from "../../domain/providers/player.provider";
+import {Route} from "../data/route";
+import {RoutingInfo} from "../data/routingInfo";
 
-let RoutingInfo = require( '../data/routingInfo' ),
-	Route = require( '../data/route' ),
-	permissions = require( '../../utils/enums' ).permissions,
-	playerProvider = require( '../../domain/providers/player.provider' ),
-	Player = require( '../../domain/data/player' );
+import {getInstance} from "../../utils/utils";
 
-
-class PlayerController {
+export class PlayerController {
 
 	private get _provider():PlayerProvider {
-		return playerProvider();
+		return getInstance( PlayerProvider );
 	}
 
 	list() {
@@ -27,7 +26,7 @@ class PlayerController {
 	create( data ) {
 		let body = data.body;
 
-		return data.user.hasPermission( permissions.ManagePlayers )
+		return data.user.hasPermission( Permissions.ManagePlayers )
 			.then( () => {
 				let player = new Player();
 				player.updateFieldVals( body );
@@ -40,7 +39,7 @@ class PlayerController {
 		let playerId = data.routeParams.player,
 			body = data.body;
 
-		return data.user.hasPermission( permissions.ManagePlayers )
+		return data.user.hasPermission( Permissions.ManagePlayers )
 			.then( () => this._provider.fetchPlayer( playerId ) )
 			.then( player => {
 				player.updateFieldVals( body );
@@ -51,30 +50,28 @@ class PlayerController {
 	get routing() {
 		return new RoutingInfo(
 			'/players',
-			new Route(
-				'/',
-				this.list
-			),
-			new Route(
-				'/',
-				this.create,
-				'POST',
-				true
-			),
-			new Route(
-				'/:player',
-				this.view
-			),
-			new Route(
-				'/:player',
-				this.update,
-				'PATCH',
-				true
-			)
+			[
+				new Route(
+					'/',
+					this.list
+				),
+				new Route(
+					'/',
+					this.create,
+					'POST',
+					true
+				),
+				new Route(
+					'/:player',
+					this.view
+				),
+				new Route(
+					'/:player',
+					this.update,
+					'PATCH',
+					true
+				)
+			]
 		);
 	}
-}
-
-export function construct() {
-	return require( '../../utils/utils' ).singleton( PlayerController );
 }

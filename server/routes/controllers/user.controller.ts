@@ -1,19 +1,16 @@
 'use strict';
+import {Permissions} from "../../utils/enums";
+import {RoutingInfo} from "../data/routingInfo";
+import {Route} from "../data/route";
+import {User} from "../../domain/data/user";
+import {UserProvider} from "../../domain/providers/user.provider";
 
-let RoutingInfo = require( '../data/routingInfo' ),
-	Route = require( '../data/route' ),
-	userProvider = require( '../../domain/providers/user.provider' ),
-	User = require( '../../domain/data/user' ),
-	permissions = require( '../../utils/enums' ).permissions;
+import {getInstance} from "../../utils/utils";
 
-class UserController {
+export class UserController {
 
-	/**
-	 * @returns {UserProvider}
-	 * @private
-	 */
-	get _provider() {
-		return userProvider();
+	private get _provider():UserProvider {
+		return getInstance( UserProvider );
 	}
 
 	list() {
@@ -23,11 +20,11 @@ class UserController {
 	view( data ) {
 		let userId = data.routeParams.user;
 
-		return this._provider.fetchUsers( userId );
+		return this._provider.fetchUser( userId );
 	}
 
 	create( data ) {
-		return data.user.hasPermission( permissions.ManagePlayers )
+		return data.user.hasPermission( Permissions.ManagePlayers )
 			.then( () => {
 				let body = data.body;
 				let user = new User();
@@ -43,28 +40,26 @@ class UserController {
 
 		return new RoutingInfo(
 			'/users',
-			new Route(
-				'/',
-				this.list,
-				'GET',
-				true
-			),
-			new Route(
-				'/:user',
-				this.view,
-				'GET',
-				true
-			),
-			new Route(
-				'/',
-				this.create,
-				'POST',
-				true
-			)
+			[
+				new Route(
+					'/',
+					this.list,
+					'GET',
+					true
+				),
+				new Route(
+					'/:user',
+					this.view,
+					'GET',
+					true
+				),
+				new Route(
+					'/',
+					this.create,
+					'POST',
+					true
+				)
+			]
 		);
 	}
-}
-
-export function construct() {
-	return require( '../../utils/utils' ).singleton( UserController );
 }

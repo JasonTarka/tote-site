@@ -1,6 +1,7 @@
 'use strict';
+import {AuthProvider} from "../providers/auth.provider";
 
-let authProvider = require( '../providers/auth.provider' );
+import {getInstance} from "../../utils/utils";
 
 export class AuthSession {
 	constructor( userId, sessionKey, dateCreated, validUntil, lastUsed ) {
@@ -23,6 +24,7 @@ export class AuthSession {
 	}
 
 	markUsed() {
-		authProvider().markAuthSessionUsed( this.userId, this.sessionKey );
+		let provider:AuthProvider = getInstance( AuthProvider );
+		provider.markAuthSessionUsed( this.userId, this.sessionKey );
 	}
 }

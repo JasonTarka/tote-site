@@ -1,18 +1,23 @@
 'use strict';
+import {AuthController} from "./controllers/auth.controller";
+import {DataObject} from "../domain/data/dataObject";
+import {PlayerController} from "./controllers/player.controller";
 import {Router} from "express";
+import {UserController} from "./controllers/user.controller";
+
+import {createAuthStrategy} from "./auth";
+import {getInstance} from "../utils/utils";
 
 let express = require( 'express' ),
 	util = require( 'util' ), // Node's util
+	authenticator = createAuthStrategy();
 
-	DataObject = require( '../domain/data/dataObject' ),
-	authenticate = require( './auth' );
-
-export var app: Router = express.Router();
+export var api:Router = express.Router();
 
 let controllers = [
-	require( './controllers/auth.controller' )(),
-	require( './controllers/player.controller' )(),
-	require( './controllers/user.controller' )()
+	getInstance( AuthController ),
+	getInstance( PlayerController ),
+	getInstance( UserController )
 ];
 
 controllers.forEach( controller => {
@@ -53,13 +58,13 @@ controllers.forEach( controller => {
 		);
 
 		if( route.authenticated ) {
-			routerMethod.call( router, route.route, authenticate, handle );
+			routerMethod.call( router, route.route, authenticator, handle );
 		} else {
 			routerMethod.call( router, route.route, handle );
 		}
 	} );
 
-	app.use( routingInfo.baseRoute, router );
+	api.use( routingInfo.baseRoute, router );
 
 	function setupRouteParams( route ) {
 		let matches = route.match( /[/]:([^:/]*)/g );

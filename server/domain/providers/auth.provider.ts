@@ -1,13 +1,13 @@
 'use strict';
 import {AuthSession} from "../data/authSession";
 import {Database} from "./database";
+import {Forbidden} from "../../utils/errors";
 
-let utils = require( '../../utils/utils' ),
-	errors = require( '../../utils/errors' );
+import {generateRandomString} from "../../utils/utils";
 
-const SESSION_KEY_LENGTH = 20;
+export const SESSION_KEY_LENGTH = 20;
 
-class AuthProvider {
+export class AuthProvider {
 	constructor() {
 		this._sessionLength = process.env.TOTE_SESSION_LENGTH_MINUTES
 			? process.env.TOTE_SESSION_LENGTH_MINUTES
@@ -30,13 +30,12 @@ class AuthProvider {
 
 	/**
 	 * @param userId
-	 * @returns {Promise.<AuthSession>}
 	 */
-	createAuthSession( userId ) {
+	createAuthSession( userId ):Promise<AuthSession> {
 		let sql = 'INSERT INTO user_auth_sessions' +
 				  '(userId, sessionKey, validUntilDate, lastUsedDate)' +
 				  ' VALUES(?,?,?,?)',
-			sessionKey = utils.generateRandomString( SESSION_KEY_LENGTH ),
+			sessionKey = generateRandomString( SESSION_KEY_LENGTH ),
 			params = [
 				userId,
 				sessionKey,
@@ -51,7 +50,6 @@ class AuthProvider {
 	/**
 	 * @param userId
 	 * @param sessionKey
-	 * @returns {Promise.<AuthSession>}
 	 */
 	fetchAuthSession( userId, sessionKey ): Promise<AuthSession> {
 		let sql = 'SELECT userId, sessionKey, dateCreated, ' +
@@ -64,7 +62,7 @@ class AuthProvider {
 		return this._db.executeQuery( sql, params )
 			.then( (rows: any[]) => {
 				if( !rows || !rows.length ) {
-					throw new errors.Forbidden();
+					throw new Forbidden();
 				}
 				return createAuthSession( rows[0] );
 			} );
@@ -95,11 +93,4 @@ function createAuthSession( row ) {
 		row.lastUsedDate
 	);
 	return session;
-}
-
-/**
- * @returns {AuthProvider}
- */
-export function construct() {
-	return utils.singleton( AuthProvider );
 }

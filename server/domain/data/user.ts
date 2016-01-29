@@ -1,19 +1,20 @@
 'use strict';
 import {DataObject} from "./dataObject";
+import {InvalidParameter} from "../../utils/errors";
+import {NotAuthorized} from "../../utils/errors";
+import {UserProvider} from "../providers/user.provider";
 
-let InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
-	passwordUtils = require( '../../utils/password' ),
-	utils = require( '../../utils/utils' ),
-	userProvider = require( '../providers/user.provider' ),
-	errors = require( '../../utils/errors' );
+import {generateRandomString} from "../../utils/utils";
+import {getInstance} from "../../utils/utils";
+import {hashPassword} from "../../utils/password";
 
-const MIN_PASSWORD_LENGTH = 8,
+export const MIN_PASSWORD_LENGTH = 8,
 	MAX_SALT_LENGTH = 20;
 
 let _permissions = new WeakMap();
 
 export class User extends DataObject {
-	constructor( id, username, password, salt, playerId ) {
+	constructor( id?, username?, password?, salt?, playerId? ) {
 		super( {
 			id: id,
 			username: username,
@@ -70,8 +71,8 @@ export class User extends DataObject {
 			);
 		}
 
-		let salt = utils.generateRandomString( MAX_SALT_LENGTH ),
-			password = passwordUtils.hash( val, salt );
+		let salt = generateRandomString( MAX_SALT_LENGTH ),
+			password = hashPassword( val, salt );
 
 		this._setFieldVal( 'salt', salt );
 		this._setFieldVal( 'password', password );
@@ -97,12 +98,13 @@ export class User extends DataObject {
 	 * otherwise.
 	 *
 	 * @param permissionId
-	 * @returns {Promise}
 	 */
-	hasPermission( permissionId ) {
-		return new Promise( ( resolve, reject ) => {
+	hasPermission( permissionId ):Promise<void> {
+		return new Promise<void>( ( resolve, reject ) => {
 			if( !_permissions.get( this ) ) {
-				userProvider().fetchPermissionsForUser( this.id )
+				let provider:UserProvider = getInstance( UserProvider );
+
+				provider.fetchPermissionsForUser( this.id )
 					.then( perms => {
 						_permissions.set( this, new Set(
 							perms.map( x => x.id )
@@ -111,7 +113,7 @@ export class User extends DataObject {
 						if( _permissions.get( this ).has( permissionId ) ) {
 							resolve();
 						} else {
-							reject( new errors.NotAuthorized() );
+							reject( new NotAuthorized() );
 						}
 					} )
 					.catch( reject );

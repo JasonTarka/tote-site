@@ -1,10 +1,11 @@
 'use strict';
+import {AuthProvider} from "../domain/providers/auth.provider";
+import {UserProvider} from "../domain/providers/user.provider";
+
+import {getInstance} from "../utils/utils";
 
 let passport = require( 'passport' ),
-	JwtStrategy = require( 'passport-jwt' ).Strategy,
-
-	authProvider = require( '../domain/providers/auth.provider' ),
-	userProvider = require( '../domain/providers/user.provider' );
+	JwtStrategy = require( 'passport-jwt' ).Strategy;
 
 export function createAuthStrategy() {
 	let options = {
@@ -16,7 +17,9 @@ export function createAuthStrategy() {
 			options,
 			( jwt, done ) =>
 				validateSession( jwt.id, jwt.sessionKey )
-					.then( (userId) => userProvider().fetchUser( userId ) )
+					.then(
+						userId => getInstance( UserProvider ).fetchUser( userId )
+					)
 					.then( user => done( null, user ) )
 					.catch( () => done( null, false ) )
 		)
@@ -27,7 +30,9 @@ export function createAuthStrategy() {
 
 function validateSession( userId, sessionKey ) {
 	return new Promise( (resolve, reject) => {
-		authProvider().fetchAuthSession( userId, sessionKey )
+		let provider:AuthProvider = getInstance( AuthProvider );
+
+		provider.fetchAuthSession( userId, sessionKey )
 			.then( authSession => {
 				if( !authSession.isValid ) {
 					return reject();

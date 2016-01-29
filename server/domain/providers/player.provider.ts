@@ -1,10 +1,9 @@
 'use strict';
 import {Database} from "./database";
+import {NotFound} from "../../utils/errors";
+import {Player} from "../data/player";
 
-let singleton = require( '../../utils/utils' ).singleton,
-	errors = require( '../../utils/errors' ),
-	tools = require( './providerTools' ),
-	Player = require( '../data/player' );
+import {generateUpdateStatement} from "./providerTools";
 
 export class PlayerProvider {
 
@@ -32,7 +31,7 @@ export class PlayerProvider {
 				.then( players => {
 					if( !players || players.length == 0 ) {
 						return reject(
-							new errors.NotFound( 'Player not found' )
+							new NotFound( 'Player not found' )
 						);
 					}
 					resolve( createPlayer( players[0] ) );
@@ -65,7 +64,7 @@ export class PlayerProvider {
 				return resolve();
 			}
 
-			let statement = tools.generateUpdateStatement( player, 'players' );
+			let statement = generateUpdateStatement( player, 'players' );
 
 			this._db.executeNonQuery( statement.sql, statement.params )
 				.then( () => {
@@ -87,11 +86,4 @@ function createPlayer( row ) {
 		!!row.isActive
 	);
 	return player;
-}
-
-/**
- * @returns {PlayerProvider}
- */
-function construct() {
-	return singleton( PlayerProvider );
 }

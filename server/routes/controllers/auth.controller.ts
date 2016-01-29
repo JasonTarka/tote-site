@@ -1,15 +1,17 @@
 'use strict';
+import {AuthProvider} from "../../domain/providers/auth.provider";
+import {BadRequest} from "../../utils/errors";
+import {Forbidden} from "../../utils/errors";
+import {Route} from "../data/route";
+import {RoutingInfo} from "../data/routingInfo";
+import {UserProvider} from "../../domain/providers/user.provider";
 
-let jwt = require( 'jsonwebtoken' ),
+import {verifyPassword} from "../../utils/password";
+import {getInstance} from "../../utils/utils";
 
-	RoutingInfo = require( '../data/routingInfo' ),
-	Route = require( '../data/route' ),
-	errors = require( '../../utils/errors' ),
-	userProvider = require( '../../domain/providers/user.provider' ),
-	authProvider = require( '../../domain/providers/auth.provider' ),
-	passwordUtils = require( '../../utils/password' );
+let jwt = require( 'jsonwebtoken' );
 
-class AuthController {
+export class AuthController {
 	constructor() {
 		this.jwtSecret = process.env.TOTE_JWT_SECRET;
 	}
@@ -20,23 +22,23 @@ class AuthController {
 	 * @returns {UserProvider}
 	 * @private
 	 */
-	get _provider() {
-		return userProvider();
+	get _provider():UserProvider {
+		return getInstance( UserProvider );
 	}
 
 	/**
 	 * @returns {AuthProvider}
 	 * @private
 	 */
-	get _authProvider() {
-		return authProvider();
+	get _authProvider():AuthProvider {
+		return getInstance( AuthProvider );
 	}
 
 	login( data ) {
 		let body = data.body;
 
 		if( !body || !body.username || !body.password ) {
-			throw new errors.BadRequest(
+			throw new BadRequest(
 				'Must include a username and password'
 			);
 		}
@@ -46,14 +48,13 @@ class AuthController {
 		return this._provider.tryFetchUserByUsername( body.username )
 			.then( user => {
 				if( user == null ) {
-					throw new errors.Forbidden( errorMessage );
+					throw new Forbidden( errorMessage );
 				}
 
-				return passwordUtils
-					.verify( user.password, body.password, user.salt )
+				return verifyPassword( user.password, body.password, user.salt )
 					.then( isValid => {
 						if( !isValid ) {
-							throw new errors.Forbidden( errorMessage );
+							throw new Forbidden( errorMessage );
 						}
 					} )
 					.then(
@@ -79,19 +80,13 @@ class AuthController {
 	get routing() {
 		return new RoutingInfo(
 			'/auth',
-			new Route(
-				'/login',
-				this.login,
-				'POST'
-			)
+			[
+				new Route(
+					'/login',
+					this.login,
+					'POST'
+				)
+	        ]
 		);
 	}
 }
-
-/**
- * @returns {AuthController}
- */
-export var construct = function() {
-	return require( '../../utils/utils' ).singleton( AuthController );
-};
-

@@ -1,7 +1,12 @@
 'use strict';
 
 export class Route {
-	constructor( route, handler, method, authenticated ) {
+	constructor(
+		route,
+		handler,
+		method?:string,
+		authenticated?:boolean
+	) {
 		if( typeof route !== 'string' ) {
 			throw new Error( '"route" is not valid' );
 		}

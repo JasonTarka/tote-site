@@ -2,8 +2,8 @@
 
 import crypto = require( 'crypto' );
 
-export function singleton( type ) {
-	var self: any = singleton;
+export function getInstance( type ) {
+	var self: any = getInstance;
 
 	if( !self.instances ) {
 		self.instances = new WeakMap();

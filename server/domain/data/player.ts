@@ -1,11 +1,12 @@
 'use strict';
 import {DataObject} from './dataObject';
+import {InvalidParameter} from "../../utils/errors";
+import {PlayerProvider} from "../providers/player.provider";
 
-let InvalidParameter = require( '../../utils/errors' ).InvalidParameter,
-	playerProvider = require( '../providers/player.provider' );
+import {getInstance} from "../../utils/utils";
 
 export class Player extends DataObject {
-	constructor( id, name, email, bio, imgPath, isActive ) {
+	constructor( id?, name?, email?, bio?, imgPath?, isActive? ) {
 		super( {
 			id: id,
 			name: name,
@@ -100,7 +101,8 @@ export class Player extends DataObject {
 			throw new Error( 'Cannot create player' );
 		}
 
-		return playerProvider().updatePlayer( this )
+		let provider:PlayerProvider = getInstance( PlayerProvider );
+		return provider.updatePlayer( this )
 			.then( () => this );
 	}
 }
