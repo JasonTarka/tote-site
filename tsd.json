@@ -31,6 +31,18 @@
     },
     "jsonwebtoken/jsonwebtoken.d.ts": {
       "commit": "df712b17fa4737fdb3eb52118b1465cd3be81a1d"
+    },
+    "should/should.d.ts": {
+      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
+    },
+    "mocha/mocha.d.ts": {
+      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
+    },
+    "sinon/sinon.d.ts": {
+      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
+    },
+    "mockery/mockery.d.ts": {
+      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
     }
   }
 }

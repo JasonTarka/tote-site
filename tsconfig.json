@@ -6,7 +6,6 @@
     "moduleResolution": "node"
   },
   "exclude": [
-    "node_modules",
-    "bin"
+    "node_modules"
   ]
 }

@@ -1,13 +1,13 @@
 'use strict';
-
-let should = require( 'should' ),
-
-	passwordUtils = require( '../../../server/utils/password' );
+import {hashPassword} from "../../../server/utils/password";
+import {verifyPassword} from "../../../server/utils/password";
 
 describe( 'password utils', () => {
+	let should = require( 'should' );
+
 	describe( 'hash()', () => {
 		it( 'should return a base64-encoded string', () => {
-			let hash = passwordUtils.hash( 'password', 'a1b2c3' );
+			let hash = hashPassword( 'password', 'a1b2c3' );
 			should( hash ).not.be.undefined()
 				.and.not.null()
 				.and.be.a.String();
@@ -17,10 +17,10 @@ describe( 'password utils', () => {
 	describe( 'verify()', () => {
 		const pass = 'this is the correct password',
 			salt = 'this is a salt';
-		let hash = passwordUtils.hash( pass, salt );
+		let hash = hashPassword( pass, salt );
 
 		it( 'eventually returns true for a correct password', done => {
-			passwordUtils.verify( hash, pass, salt )
+			verifyPassword( hash, pass, salt )
 				.then( result => {
 					result.should.be.true();
 					done();
@@ -29,7 +29,7 @@ describe( 'password utils', () => {
 		} );
 
 		it( 'eventually returns false for an incorrect password', done => {
-			passwordUtils.verify( hash, 'this is the wrong password', salt )
+			verifyPassword( hash, 'this is the wrong password', salt )
 				.then( result => {
 					result.should.be.false();
 					done();
@@ -39,7 +39,7 @@ describe( 'password utils', () => {
 
 		it( 'throws an error for a non-string hash', () => {
 			(() => {
-				passwordUtils.verify( 123, pass, salt );
+				verifyPassword( 123, pass, salt );
 			}).should.throw();
 		} );
 	} );
@@ -48,10 +48,10 @@ describe( 'password utils', () => {
 		const password = 'the password',
 			salts = ['salt', 'pepper'];
 
-		let hash = passwordUtils.hash( password, salts[0] );
-		passwordUtils.verify( hash, password, salts[0] )
+		let hash = hashPassword( password, salts[0] );
+		verifyPassword( hash, password, salts[0] )
 			.then( result => result.should.be.true() )
-			.then( () => passwordUtils.verify( hash, password, salts[1] ) )
+			.then( () => verifyPassword( hash, password, salts[1] ) )
 			.then( result => result.should.be.false() )
 			.then( () => done() )
 			.catch( done );

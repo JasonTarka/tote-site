@@ -1,10 +1,9 @@
 'use strict';
-
-let should = require( 'should' ),
-
-	utils = require( '../../../server/utils/utils' );
+import {clone} from "../../../server/utils/utils";
 
 describe( 'utils', () => {
+	let should = require( 'should' );
+
 	describe( 'object cloning', () => {
 
 		it( 'copies basic types', () => {
@@ -14,20 +13,20 @@ describe( 'utils', () => {
 				5.34,
 				null
 			].forEach(
-				x => should( utils.clone( x ) ).equal( x )
+				x => should( clone( x ) ).equal( x )
 			);
 		} );
 
 		it( 'copies an Array', () => {
 			let arr = [54, 'a string', 5.34, null],
-				copy = utils.clone( arr );
+				copy = clone( arr );
 
 			copy.should.deepEqual( arr );
 		} );
 
 		it( 'copies a Date', () => {
 			let date = Date.parse( '2016-01-04 23:07:59' ),
-				copy = utils.clone( date );
+				copy = clone( date );
 
 			copy.should.equal( date );
 		} );
@@ -39,7 +38,7 @@ describe( 'utils', () => {
 				'hello': 'goodbye'
 			};
 
-			let copy = utils.clone( obj );
+			let copy = clone( obj );
 			copy.should.deepEqual( obj );
 		} );
 
@@ -50,7 +49,7 @@ describe( 'utils', () => {
 				'hello': 'goodbye'
 			};
 
-			let copy = utils.clone( obj );
+			let copy = clone( obj );
 			copy.should.deepEqual( obj );
 		} );
 
@@ -79,12 +78,14 @@ describe( 'utils', () => {
 				}
 			};
 
-			let copy = utils.clone( obj );
+			let copy = clone( obj );
 			copy.should.deepEqual( obj );
 		} );
 
 		it( 'copied a class', () => {
 			class TestClass {
+				private _myVal:any;
+
 				constructor( val ) {
 					this.myVal = val;
 				}
@@ -99,7 +100,7 @@ describe( 'utils', () => {
 			}
 
 			let obj = new TestClass( 23 );
-			let copy = utils.clone( obj );
+			let copy = clone( obj );
 			copy.should.deepEqual( obj );
 			copy.myVal.should.equal( obj.myVal );
 		} );

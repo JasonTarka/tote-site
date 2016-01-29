@@ -1,13 +1,15 @@
 'use strict';
+import {InvalidParameter} from "../../../../server/utils/errors";
+import {NotAuthorized} from "../../../../server/utils/errors";
 
-let should = require( 'should' ),
-	mockery = require( 'mockery' ),
-	sinon = require( 'sinon' ),
-	utils = require( '../../../../server/utils/utils' ),
-	passwordUtils = require( '../../../../server/utils/password' ),
-	errors = require( '../../../../server/utils/errors' );
+import {setToArray} from "../../../../server/utils/utils";
+import {verifyPassword} from "../../../../server/utils/password";
 
 describe( 'User data object', () => {
+	let should = require( 'should' ),
+		mockery = require( 'mockery' ),
+		sinon = require( 'sinon' );
+
 	var User;
 
 	const id = 56,
@@ -77,12 +79,12 @@ describe( 'User data object', () => {
 	describe( 'changing password', () => {
 		it( 'throws error if password is not a string', () => {
 			(() => user.password = 42)
-				.should.throw( errors.InvalidParameter );
+				.should.throw( InvalidParameter );
 		} );
 
 		it( 'throws error if password is too short', () => {
 			(() => user.password = 'short')
-				.should.throw( errors.InvalidParameter );
+				.should.throw( InvalidParameter );
 		} );
 
 		it( 'generates a new password and salt, and marks them dirty', () => {
@@ -95,7 +97,7 @@ describe( 'User data object', () => {
 			user.salt.should.not.equal( oldSalt );
 
 			user.isDirty.should.be.true();
-			utils.setToArray( user.dirtyFields )
+			setToArray( user.dirtyFields )
 				.should.containEql( 'password' )
 				.and.containEql( 'salt' );
 		} );
@@ -104,7 +106,7 @@ describe( 'User data object', () => {
 			const password = 'my new password';
 			user.password = password;
 
-			passwordUtils.verify( user.password, password, user.salt )
+			verifyPassword( user.password, password, user.salt )
 				.then( result => {
 					result.should.be.true();
 					done();
@@ -116,7 +118,7 @@ describe( 'User data object', () => {
 			const password = 'my new password';
 			user.password = password;
 
-			passwordUtils.verify( user.password, password, 123 )
+			verifyPassword( user.password, password, 123 )
 				.then( result => {
 					result.should.be.false();
 					done();
@@ -167,7 +169,7 @@ describe( 'User data object', () => {
 					new Error( 'Should not have had permission' )
 				) )
 				.catch( err => {
-					should( err ).be.instanceof( errors.NotAuthorized );
+					should( err ).be.instanceof( NotAuthorized );
 
 					done();
 				} )

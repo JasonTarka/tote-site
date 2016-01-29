@@ -1,17 +1,15 @@
 'use strict';
-
-let should = require( 'should' ),
-	mockery = require( 'mockery' ),
-	sinon = require( 'sinon' ),
-	jwt = require( 'jsonwebtoken' ),
-
-	errors = require( '../../../../server/utils/errors' ),
-	User = require( '../../../../server/domain/data/user' ),
-	AuthSession = require( '../../../../server/domain/data/authSession' );
-
-require( 'should-sinon' );
+import {AuthSession} from "../../../../server/domain/data/authSession";
+import {Forbidden} from "../../../../server/utils/errors";
+import {User} from "../../../../server/domain/data/user";
 
 describe( 'Auth Controller', () => {
+	let should = require( 'should' ),
+		mockery = require( 'mockery' ),
+		sinon = require( 'sinon' ),
+		jwt = require( 'jsonwebtoken' );
+	require( 'should-sinon' );
+
 	const username = 'Darth.Vader',
 		password = 'the password of the user',
 		jwtSecret = '12345';
@@ -86,7 +84,7 @@ describe( 'Auth Controller', () => {
 				.then(
 					() => done( new Error( 'Should have thrown error' ) ),
 					err => {
-						err.should.be.instanceOf( errors.Forbidden );
+						err.should.be.instanceOf( Forbidden );
 						done();
 					}
 				)
@@ -100,7 +98,7 @@ describe( 'Auth Controller', () => {
 				.then(
 					() => done( new Error( 'Should have been rejected' ) ),
 					err => {
-						err.should.be.instanceOf( errors.Forbidden );
+						err.should.be.instanceOf( Forbidden );
 						done();
 					}
 				)
@@ -154,6 +152,12 @@ describe( 'Auth Controller', () => {
 	function AuthProviderMock() {
 		this.sessionKey = 'a1b2c3d4';
 		this.createAuthSession =
-			() => new AuthSession( user.id, this.sessionKey );
+			() => new AuthSession(
+				user.id,
+				this.sessionKey,
+				new Date(),
+				new Date( '2030-10-10' ),
+				new Date()
+			);
 	}
 } );

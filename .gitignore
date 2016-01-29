@@ -6,4 +6,7 @@ typings
 bin
 server/**/*.js
 server/**/*.js.map
+tests/**/*.js
+tests/**/*.js.map
+!.eslintrc.js
 

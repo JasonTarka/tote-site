@@ -1,10 +1,9 @@
 'use strict';
-
-let should = require( 'should' ),
-
-	DataObject = require( '../../../../server/domain/data/dataObject' );
+import {DataObject} from "../../../../server/domain/data/dataObject";
 
 describe( 'Data Object', () => {
+	let should = require( 'should' );
+
 	/** @type {DataObject} */
 	var dataObject;
 
@@ -88,7 +87,7 @@ describe( 'Data Object', () => {
 		});
 
 		it( 'does not set identifier fields', () => {
-			let data = {
+			let data:any = {
 				id: 42
 			};
 			dataObject.updateFieldVals( data );
@@ -135,6 +134,8 @@ class TestDataObject extends DataObject {
 			)
 		);
 	}
+
+	private __identifierFields:string[];
 
 	get identifierFields() {
 		return this.__identifierFields;

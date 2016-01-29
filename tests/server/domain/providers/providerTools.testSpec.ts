@@ -1,10 +1,9 @@
 'use strict';
-
-let should = require( 'should' ),
-
-	providerTools = require( '../../../../server/domain/providers/providerTools' );
+import {generateUpdateStatement} from "../../../../server/domain/providers/providerTools";
 
 describe( 'Provider Tools', () => {
+	let should = require( 'should' )
+
 	var dataObjectMock;
 
 	beforeEach( () => {
@@ -15,7 +14,7 @@ describe( 'Provider Tools', () => {
 		it( 'returns null when the DataObject is not dirty', () => {
 			dataObjectMock.isDirty = false;
 
-			let result = providerTools.generateUpdateStatement( dataObjectMock );
+			let result = generateUpdateStatement( dataObjectMock, 'people' );
 			should( result ).be.null();
 		} );
 
@@ -31,8 +30,7 @@ describe( 'Provider Tools', () => {
 			dataObjectMock.name = 'Darth Vader';
 
 			// Test
-			let result = providerTools
-				.generateUpdateStatement( dataObjectMock, 'users' );
+			let result = generateUpdateStatement( dataObjectMock, 'users' );
 
 			assertExpectedResults( expectedSql, expectedParams, result );
 		} );
@@ -59,8 +57,7 @@ describe( 'Provider Tools', () => {
 			dataObjectMock.id = expectedParams[3];
 
 			// Test
-			let result = providerTools
-				.generateUpdateStatement( dataObjectMock, 'users' );
+			let result = generateUpdateStatement( dataObjectMock, 'users' );
 
 			assertExpectedResults( expectedSql, expectedParams, result );
 		} );
@@ -86,8 +83,7 @@ describe( 'Provider Tools', () => {
 			dataObjectMock.loginCount = expectedParams[3];
 
 			// Test
-			let result = providerTools
-				.generateUpdateStatement( dataObjectMock, 'users' );
+			let result = generateUpdateStatement( dataObjectMock, 'users' );
 
 			assertExpectedResults( expectedSql, expectedParams, result );
 		} );

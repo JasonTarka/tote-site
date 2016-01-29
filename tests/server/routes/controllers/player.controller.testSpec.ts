@@ -1,16 +1,14 @@
 'use strict';
-
-let should = require( 'should' ),
-	mockery = require( 'mockery' ),
-	sinon = require( 'sinon' ),
-
-	errors = require( '../../../../server/utils/errors' ),
-	Player = require( '../../../../server/domain/data/player' ),
-	permissions = require( '../../../../server/utils/enums' ).permissions;
-
-require( 'should-sinon' );
+import {NotFound} from "../../../../server/utils/errors";
+import {Permissions} from "../../../../server/utils/enums";
+import {Player} from "../../../../server/domain/data/player";
 
 describe( 'Player Controller', () => {
+	let should = require( 'should' ),
+		mockery = require( 'mockery' ),
+		sinon = require( 'sinon' );
+	require( 'should-sinon' );
+
 	const playerId = 21,
 		playerName = 'Joe Namith',
 		playerEmail = 'joe.namith@example.com',
@@ -85,7 +83,7 @@ describe( 'Player Controller', () => {
 
 	describe( 'update', () => {
 		it( 'enforces Manage Players permission', done => {
-			const requiredPermission = permissions.ManagePlayers;
+			const requiredPermission = Permissions.ManagePlayers;
 
 			user.hasManagePermission = false;
 			sinon.spy( user, 'hasPermission' );
@@ -216,7 +214,7 @@ describe( 'Player Controller', () => {
 		} );
 
 		it( 'enforces Manage Players permission', done => {
-			const requiredPermission = permissions.ManagePlayers;
+			const requiredPermission = Permissions.ManagePlayers;
 
 			user.hasManagePermission = false;
 			sinon.spy( user, 'hasPermission' );
@@ -239,7 +237,7 @@ describe( 'Player Controller', () => {
 		this.fetchPlayer = id => new Promise( ( resolve, reject ) =>
 			id == player.id
 				? resolve( player )
-				: reject( new errors.NotFound() )
+				: reject( new NotFound() )
 		);
 
 		this.createPlayer = function() {};
