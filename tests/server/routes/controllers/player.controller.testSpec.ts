@@ -2,6 +2,10 @@
 import {NotFound} from "../../../../server/utils/errors";
 import {Permissions} from "../../../../server/utils/enums";
 import {Player} from "../../../../server/domain/data/player";
+import {PlayerProvider} from "../../../../server/domain/providers/player.provider";
+
+import {registerMockInstance} from "../../../testUtils";
+import {requireUncached} from "../../../testUtils";
 
 describe( 'Player Controller', () => {
 	let should = require( 'should' ),
@@ -17,12 +21,10 @@ describe( 'Player Controller', () => {
 		playerImgPath = '/path/to/image.png',
 		playerIsActive = true;
 
-
 	var PlayerController,
 		/** @type {PlayerController} */
 		controller,
-		/** @type {Player} */
-		player,
+		player:Player,
 		/** @type {PlayerProviderMock} */
 		playerProviderMock,
 		/** @type {UserMock} */
@@ -49,9 +51,9 @@ describe( 'Player Controller', () => {
 		user = new UserMock();
 
 		playerProviderMock = new PlayerProviderMock();
-		mockery.registerMock(
-			'../../domain/providers/player.provider',
-			() => playerProviderMock
+		registerMockInstance(
+			PlayerProvider,
+			playerProviderMock
 		);
 
 		data = {
@@ -69,13 +71,9 @@ describe( 'Player Controller', () => {
 		};
 
 		// Ensure we're not using the cached version from other tests
-		mockery.registerAllowable(
-			'../../../../server/routes/controllers/player.controller',
-			true
-		);
-		PlayerController = require(
-			'../../../../server/routes/controllers/player.controller'
-		);
+		PlayerController = requireUncached(
+			'server/routes/controllers/player.controller'
+		).PlayerController;
 		controller = new PlayerController();
 	} );
 

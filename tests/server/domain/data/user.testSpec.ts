@@ -1,7 +1,14 @@
 'use strict';
 import {InvalidParameter} from "../../../../server/utils/errors";
 import {NotAuthorized} from "../../../../server/utils/errors";
+import {Permission} from "../../../../server/domain/data/permission";
+import {User} from "../../../../server/domain/data/user";
+import {UserProvider} from "../../../../server/domain/providers/user.provider";
 
+import {generateRandomString} from "../../../../server/utils/utils";
+import {getInstance} from "../../../../server/utils/utils";
+import {registerMockInstance} from "../../../testUtils";
+import {requireUncached} from "../../../testUtils";
 import {setToArray} from "../../../../server/utils/utils";
 import {verifyPassword} from "../../../../server/utils/password";
 
@@ -18,10 +25,8 @@ describe( 'User data object', () => {
 		salt = 'pepper',
 		playerId = 45;
 
-	/** @type {User} */
-	var user,
-		/** @type {UserProviderMock} */
-		userProviderMock;
+	var user:User,
+		userProviderMock:UserProviderMock;
 
 	before( () => {
 		mockery.enable( {
@@ -35,15 +40,13 @@ describe( 'User data object', () => {
 
 	beforeEach( () => {
 		userProviderMock = new UserProviderMock();
-		mockery.registerMock(
-			'../providers/user.provider',
-			() => userProviderMock
+		registerMockInstance(
+			UserProvider,
+			userProviderMock
 		);
 
 		// Ensure we're not using the cached version from other tests
-		mockery.registerAllowable( '../../../../server/domain/data/user', true );
-
-		User = require( '../../../../server/domain/data/user' );
+		User = requireUncached( 'server/domain/data/user' ).User;
 		user = new User( id, username, password, salt, playerId );
 	} );
 
@@ -78,7 +81,8 @@ describe( 'User data object', () => {
 
 	describe( 'changing password', () => {
 		it( 'throws error if password is not a string', () => {
-			(() => user.password = 42)
+			let localUser:any = user;
+			(() => localUser.password = 42)
 				.should.throw( InvalidParameter );
 		} );
 
@@ -145,16 +149,17 @@ describe( 'User data object', () => {
 	describe( 'has permission', () => {
 		it( 'resolves when user has permission', done => {
 			const permissionId = 2;
+			let providerMock:any = userProviderMock;
 
 			// Setup
-			userProviderMock.permissionsForUser.push( permissionId );
+			providerMock.permissionsForUser.push( permissionId );
 
-			sinon.spy( userProviderMock, 'fetchPermissionsForUser' );
+			sinon.spy( providerMock, 'fetchPermissionsForUser' );
 
 			// Test
 			user.hasPermission( permissionId )
 				.then( () => {
-					userProviderMock.fetchPermissionsForUser.called
+					providerMock.fetchPermissionsForUser.called
 						.should.be.true();
 					done();
 				} )
@@ -178,21 +183,22 @@ describe( 'User data object', () => {
 
 		it( 'only calls the database on first call', done => {
 			const permissionId = 2;
+			let providerMock:any = userProviderMock;
 
 			// Setup
 			userProviderMock.permissionsForUser.push( permissionId );
 
-			sinon.spy( userProviderMock, 'fetchPermissionsForUser' );
+			sinon.spy( providerMock, 'fetchPermissionsForUser' );
 
 			// Test
 			user.hasPermission( permissionId )
 				.then( () => {
-					userProviderMock.fetchPermissionsForUser.calledOnce
+					providerMock.fetchPermissionsForUser.calledOnce
 						.should.be.true();
 
 					return user.hasPermission( permissionId )
 						.then( () => {
-							userProviderMock.fetchPermissionsForUser.callCount
+							providerMock.fetchPermissionsForUser.callCount
 								.should.equal( 1 );
 
 							done();
@@ -202,15 +208,20 @@ describe( 'User data object', () => {
 		} );
 	} );
 
-	function UserProviderMock() {
-		let Permission = require( '../../../../server/domain/data/permission' );
+	class UserProviderMock {
+		constructor() {
+			let Permission = require( '../../../../server/domain/data/permission' );
 
-		this.permissionsForUser = [];
-		this.fetchPermissionsForUser = ( userId ) => {
+			this.permissionsForUser = [];
+		}
+
+		permissionsForUser:number[];
+
+		fetchPermissionsForUser( userId ) {
 			userId.should.equal( user.id );
 			return new Promise( resolve => resolve(
-				this.permissionsForUser.map( x => new Permission( x ) )
+				this.permissionsForUser.map( x => new Permission( x, 'Fake Permission' ) )
 			) );
-		};
+		}
 	}
 } );

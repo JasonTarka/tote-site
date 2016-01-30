@@ -1,7 +1,12 @@
 'use strict';
+import {AuthProvider} from "../../../../server/domain/providers/auth.provider";
 import {AuthSession} from "../../../../server/domain/data/authSession";
 import {Forbidden} from "../../../../server/utils/errors";
 import {User} from "../../../../server/domain/data/user";
+import {UserProvider} from "../../../../server/domain/providers/user.provider";
+
+import {registerMockInstance} from "../../../testUtils";
+import {requireUncached} from "../../../testUtils";
 
 describe( 'Auth Controller', () => {
 	let should = require( 'should' ),
@@ -25,31 +30,17 @@ describe( 'Auth Controller', () => {
 		authProviderMock,
 		data;
 
-	before( () => {
-		mockery.enable( {
-			warnOnUnregistered: false
-		} );
-	} );
-
-	after( () => {
-		mockery.disable();
-	} );
-
 	beforeEach( () => {
 		userProviderMock = new UserProviderMock();
-		mockery.registerMock(
-			'../../domain/providers/user.provider',
-			() => userProviderMock
-		);
-		mockery.registerMock(
-			'../providers/user.provider',
-			() => userProviderMock
+		registerMockInstance(
+			UserProvider,
+			userProviderMock
 		);
 
 		authProviderMock = new AuthProviderMock();
-		mockery.registerMock(
-			'../../domain/providers/auth.provider',
-			() => authProviderMock
+		registerMockInstance(
+			AuthProvider,
+			authProviderMock
 		);
 
 		user = new User( 42 );
@@ -65,9 +56,9 @@ describe( 'Auth Controller', () => {
 			}
 		};
 
-		AuthController = require(
-			'../../../../server/routes/controllers/auth.controller'
-		);
+		AuthController = requireUncached(
+			'server/routes/controllers/auth.controller'
+		).AuthController;
 		controller = new AuthController();
 		controller.jwtSecret = jwtSecret;
 	} );
