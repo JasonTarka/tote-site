@@ -20,7 +20,7 @@ export class AuthProvider {
 		return Database.instance;
 	}
 
-	get _newValidUntilDate() {
+	private get _newValidUntilDate():Date {
 		let date = new Date(),
 			millis = this._sessionLength * 60 * 1000;
 		date.setTime( date.getTime() + millis );
@@ -28,10 +28,7 @@ export class AuthProvider {
 		return date;
 	}
 
-	/**
-	 * @param userId
-	 */
-	createAuthSession( userId ):Promise<AuthSession> {
+	createAuthSession( userId:number ):Promise<AuthSession> {
 		let sql = 'INSERT INTO user_auth_sessions' +
 				  '(userId, sessionKey, validUntilDate, lastUsedDate)' +
 				  ' VALUES(?,?,?,?)',
@@ -47,11 +44,7 @@ export class AuthProvider {
 			.then( () => this.fetchAuthSession( userId, sessionKey ) );
 	}
 
-	/**
-	 * @param userId
-	 * @param sessionKey
-	 */
-	fetchAuthSession( userId, sessionKey ): Promise<AuthSession> {
+	fetchAuthSession( userId:number, sessionKey:string ): Promise<AuthSession> {
 		let sql = 'SELECT userId, sessionKey, dateCreated, ' +
 				  'validUntilDate, lastUsedDate' +
 				  ' FROM user_auth_sessions' +
@@ -68,7 +61,7 @@ export class AuthProvider {
 			} );
 	}
 
-	markAuthSessionUsed( userId, sessionKey ) {
+	markAuthSessionUsed( userId:number, sessionKey:string ) {
 		let sql = 'UPDATE user_auth_sessions' +
 				  ' SET validUntilDate = ?,' +
 				  ' lastUsedDate = NOW()' +
@@ -84,7 +77,7 @@ export class AuthProvider {
 	}
 }
 
-function createAuthSession( row ) {
+function createAuthSession( row:any ):AuthSession {
 	let session = new AuthSession(
 		row.userId,
 		row.sessionKey,

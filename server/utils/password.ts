@@ -2,7 +2,7 @@
 
 let scrypt = require( 'scrypt' );
 
-export function hashPassword( password, salt ) {
+export function hashPassword( password:string, salt:string ):string {
 	const MAX_TIME = 0.9; // Maximum time to spend hashing (in seconds)
 
 	password = saltPassword( password, salt );
@@ -14,7 +14,7 @@ export function hashPassword( password, salt ) {
 	return hash;
 }
 
-export function verifyPassword( hash, password, salt ) {
+export function verifyPassword( hash, password:string, salt:string ):boolean {
 	if( typeof hash === 'string' ) {
 		hash = new Buffer( hash, 'base64' );
 	} else if( !(hash instanceof Buffer) ) {
@@ -25,6 +25,6 @@ export function verifyPassword( hash, password, salt ) {
 	return scrypt.verifyKdf( hash, password );
 }
 
-function saltPassword( password, salt ) {
+function saltPassword( password:string, salt:string ):string {
 	return salt + ' ' + password + salt;
 }

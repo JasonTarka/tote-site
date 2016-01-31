@@ -1,7 +1,9 @@
 'use strict';
 import {AuthController} from "./controllers/auth.controller";
+import {IController} from "./controllers/controller";
 import {DataObject} from "../domain/data/dataObject";
 import {PlayerController} from "./controllers/player.controller";
+import {RequestData} from "./requestData";
 import {Router} from "express";
 import {UserController} from "./controllers/user.controller";
 
@@ -14,7 +16,7 @@ let express = require( 'express' ),
 
 export var api:Router = express.Router();
 
-let controllers = [
+let controllers:IController[] = [
 	getInstance( AuthController ),
 	getInstance( PlayerController ),
 	getInstance( UserController )
@@ -84,8 +86,8 @@ controllers.forEach( controller => {
 	}
 } );
 
-function handleRequest( req, res, next, controller, handler ) {
-	let data = {
+function handleRequest( req, res, next, controller:IController, handler:Function ) {
+	let data:RequestData = {
 			routeParams: req.routeParams,
 			body: req.body,
 			user: req.user

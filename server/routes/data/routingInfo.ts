@@ -6,12 +6,7 @@ export class RoutingInfo {
 		baseRoute:string,
 		routes:Route[]
 	) {
-		if( typeof baseRoute !== 'string' ) {
-			throw new Error( '"basePath" is not valid' );
-		}
-		if( !(routes instanceof Array && routes.length)
-			&& !(routes instanceof Route)
-		) {
+		if( !(routes instanceof Array && routes.length) ) {
 			throw new Error( '"routes" cannot be empty' );
 		}
 

@@ -2,7 +2,7 @@
 import {DataObject} from './dataObject';
 
 export class Permission extends DataObject {
-	constructor( id, name ) {
+	constructor( id:number, name:string ) {
 		super( {
 			id: id,
 			name: name
@@ -16,11 +16,11 @@ export class Permission extends DataObject {
 		};
 	}
 
-	get id() {
+	get id():number {
 		return this._getFieldVal( 'id' );
 	}
 
-	get name() {
+	get name():string {
 		return this._getFieldVal( 'name' );
 	}
 }

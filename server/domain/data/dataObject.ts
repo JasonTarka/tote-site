@@ -3,7 +3,7 @@ import {FunctionNotImplemented} from "../../utils/errors";
 
 import {clone} from "../../utils/utils";
 
-let _data = new WeakMap();
+let _data:WeakMap<DataObject, {}> = new WeakMap();
 
 export class DataObject {
 	constructor( data ) {
@@ -62,21 +62,21 @@ export class DataObject {
 
 	/***** Private/Protected methods *****/
 
-	_markDirty( field: string ) {
+	protected _markDirty( field: string ) {
 		if( !this.dirtyFields.has( field ) ) {
 			this.dirtyFields.add( field );
 		}
 	}
 
-	_getFieldVal( field: string ) {
+	protected _getFieldVal( field: string ) {
 		return _data.get( this )[field];
 	}
 
-	_getFieldVals():Object  {
+	protected _getFieldVals():{}  {
 		return clone( _data.get( this ) );
 	}
 
-	_setFieldVal( field: string, value ) {
+	protected _setFieldVal( field: string, value ) {
 		let data = _data.get( this );
 		if( data[field] === value ) {
 			return;

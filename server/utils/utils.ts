@@ -48,14 +48,14 @@ export function clone( obj ) {
 	return copy;
 }
 
-export function generateRandomString( maxLength ) {
+export function generateRandomString( maxLength:number ):string {
 	let length = Math.floor( maxLength / 2 );
 
 	return crypto.randomBytes( length )
 		.toString( 'hex' );
 }
 
-export function setToArray( set ) {
+export function setToArray<T>( set:Set<T> ):T[] {
 	if( !(set instanceof Set) ) {
 		throw new Error( 'Not a set' );
 	}

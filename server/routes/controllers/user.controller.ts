@@ -1,5 +1,7 @@
 'use strict';
+import {IController} from "./controller";
 import {Permissions} from "../../utils/enums";
+import {RequestData} from "../requestData";
 import {RoutingInfo} from "../data/routingInfo";
 import {Route} from "../data/route";
 import {User} from "../../domain/data/user";
@@ -7,23 +9,23 @@ import {UserProvider} from "../../domain/providers/user.provider";
 
 import {getInstance} from "../../utils/utils";
 
-export class UserController {
+export class UserController implements IController {
 
 	private get _provider():UserProvider {
 		return getInstance( UserProvider );
 	}
 
-	list() {
+	list():Promise<User[]> {
 		return this._provider.fetchUsers();
 	}
 
-	view( data ) {
+	view( data:RequestData ):Promise<User> {
 		let userId = data.routeParams.user;
 
 		return this._provider.fetchUser( userId );
 	}
 
-	create( data ) {
+	create( data:RequestData ):Promise<User> {
 		return data.user.hasPermission( Permissions.ManagePlayers )
 			.then( () => {
 				let body = data.body;
@@ -36,8 +38,7 @@ export class UserController {
 			} );
 	}
 
-	get routing() {
-
+	get routing():RoutingInfo {
 		return new RoutingInfo(
 			'/users',
 			[

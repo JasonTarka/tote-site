@@ -60,7 +60,7 @@ export class User extends DataObject {
 		return this._getFieldVal( 'password' );
 	}
 
-	set password( val ) {
+	set password( val:string ) {
 		if( !val
 			|| typeof val !== 'string'
 		) {
@@ -88,7 +88,7 @@ export class User extends DataObject {
 		return this._getFieldVal( 'playerId' );
 	}
 
-	set playerId( val ) {
+	set playerId( val:number ) {
 		this._setFieldVal( 'playerId', val );
 	}
 
@@ -99,7 +99,7 @@ export class User extends DataObject {
 	 *
 	 * @param permissionId
 	 */
-	hasPermission( permissionId ):Promise<void> {
+	hasPermission( permissionId:number ):Promise<void> {
 		return new Promise<void>( ( resolve, reject ) => {
 			if( !_permissions.get( this ) ) {
 				let provider:UserProvider = getInstance( UserProvider );

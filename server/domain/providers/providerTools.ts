@@ -6,7 +6,7 @@ export function generateUpdateStatement(
 	tableName:string
 ):{
 	sql:string,
-	params:{}
+	params:any[]
 } {
 	if( !dataObject.isDirty ) {
 		return null;

@@ -1,9 +1,11 @@
 'use strict';
+import {IMySql} from "mysql";
+import {IPool} from "mysql";
 
-let mysql = require( 'mysql' );
+let mysql:IMySql = require( 'mysql' );
 
 export class Database {
-	constructor( host, database, user, password ) {
+	constructor( host:string, database:string, user:string, password:string ) {
 		this._pool = mysql.createPool( {
 			host: host,
 			database: database,
@@ -16,7 +18,7 @@ export class Database {
 		} );
 	}
 
-	private _pool;
+	private _pool:IPool;
 
 	private static _instance:Database;
 	public static get instance():Database {
@@ -53,9 +55,8 @@ export class Database {
 	 * Execute an INSERT query, getting the newly inserted ID as a result
 	 * @param sql The SQL to execute
 	 * @param params The ordered parameters of the SQL
-	 * @returns {Promise.<Number>}
 	 */
-	executeInsert( sql, params ) {
+	executeInsert( sql:string, params:any[] ):Promise<number> {
 		return this.executeQuery( sql, params )
 			.then( ( result:any ) => result.insertId );
 	}
@@ -67,7 +68,7 @@ export class Database {
 	 * @param params
 	 * @returns {Promise}
 	 */
-	executeNonQuery( sql, params ) {
+	executeNonQuery( sql:string, params?:any[] ) {
 		return new Promise( ( resolve, reject ) => {
 			this.executeQuery( sql, params )
 				.then( () => resolve() )

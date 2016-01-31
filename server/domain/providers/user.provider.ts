@@ -10,7 +10,7 @@ export class UserProvider {
 		return Database.instance;
 	}
 
-	createUser( user:User ) {
+	createUser( user:User ):Promise<User> {
 		let sql = 'INSERT INTO users(username, password, salt, playerId) ' +
 				  'VALUES(?, ?, ?, ?)',
 			values = [user.username, user.password, user.salt, user.playerId];
@@ -19,7 +19,7 @@ export class UserProvider {
 			.then( newId => this.fetchUser( newId ) );
 	}
 
-	fetchUsers() {
+	fetchUsers():Promise<User[]> {
 		let sql = 'SELECT * FROM users WHERE deleted = 0';
 
 		return new Promise( ( resolve, reject ) => {
@@ -31,7 +31,7 @@ export class UserProvider {
 		} );
 	}
 
-	fetchUser( userId ) {
+	fetchUser( userId:number ):Promise<User> {
 		let sql = 'SELECT * FROM users WHERE id = ? AND deleted = 0';
 
 		return new Promise( ( resolve, reject ) => {
@@ -51,10 +51,8 @@ export class UserProvider {
 	/**
 	 * Try to fetch the user matching the given username.
 	 * If no user is found then the promise will be resolved with {null}.
-	 *
-	 * @param username
 	 */
-	tryFetchUserByUsername( username ):Promise<User> {
+	tryFetchUserByUsername( username:string ):Promise<User> {
 		let sql = 'SELECT * FROM users WHERE username = ? AND deleted = 0';
 
 		return new Promise( ( resolve, reject ) => {
@@ -69,7 +67,7 @@ export class UserProvider {
 		} );
 	}
 
-	fetchPermissionsForUser( userId ) {
+	fetchPermissionsForUser( userId:number ):Promise<Permission[]> {
 		let sql = 'SELECT permissionId FROM user_permissions WHERE userId = ?',
 			params = [userId];
 
@@ -78,7 +76,7 @@ export class UserProvider {
 	}
 }
 
-function createUser( row ) {
+function createUser( row ):User {
 	let user = new User(
 		row.id,
 		row.username,

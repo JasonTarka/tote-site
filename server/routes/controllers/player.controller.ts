@@ -1,29 +1,31 @@
 'use strict';
+import {IController} from "./controller";
 import {Permissions} from "../../utils/enums";
 import {Player} from "../../domain/data/player";
 import {PlayerProvider} from "../../domain/providers/player.provider";
+import {RequestData} from "../requestData";
 import {Route} from "../data/route";
 import {RoutingInfo} from "../data/routingInfo";
 
 import {getInstance} from "../../utils/utils";
 
-export class PlayerController {
+export class PlayerController implements IController {
 
 	private get _provider():PlayerProvider {
 		return getInstance( PlayerProvider );
 	}
 
-	list() {
+	list():Promise<Player[]> {
 		return this._provider.fetchPlayers();
 	}
 
-	view( data ) {
+	view( data:RequestData ):Promise<Player> {
 		let playerId = data.routeParams.player;
 
 		return this._provider.fetchPlayer( playerId );
 	}
 
-	create( data ) {
+	create( data:RequestData ):Promise<Player> {
 		let body = data.body;
 
 		return data.user.hasPermission( Permissions.ManagePlayers )
@@ -35,7 +37,7 @@ export class PlayerController {
 			} );
 	}
 
-	update( data ) {
+	update( data:RequestData ):Promise<Player> {
 		let playerId = data.routeParams.player,
 			body = data.body;
 
@@ -47,7 +49,7 @@ export class PlayerController {
 			} );
 	}
 
-	get routing() {
+	get routing():RoutingInfo {
 		return new RoutingInfo(
 			'/players',
 			[

@@ -11,7 +11,7 @@ export class PlayerProvider {
 		return Database.instance;
 	}
 
-	fetchPlayers() {
+	fetchPlayers():Promise<Player[]> {
 		let sql = 'SELECT * FROM players';
 
 		return new Promise( ( resolve, reject ) => {
@@ -23,7 +23,7 @@ export class PlayerProvider {
 		} );
 	}
 
-	fetchPlayer( playerId ) {
+	fetchPlayer( playerId ):Promise<Player> {
 		let sql = 'SELECT * FROM players WHERE id = ?';
 
 		return new Promise( ( resolve, reject ) => {
@@ -40,7 +40,7 @@ export class PlayerProvider {
 		} );
 	}
 
-	createPlayer( player ) {
+	createPlayer( player:Player ):Promise<Player> {
 		let sql = `INSERT INTO players(name, email, bio, imgPath, isActive)
 				  VALUES(?, ?, ?, ?, ?)`,
 			values = [
@@ -55,10 +55,7 @@ export class PlayerProvider {
 			.then( newId => this.fetchPlayer( newId ) );
 	}
 
-	/**
-	 * @param player {Player}
-	 */
-	updatePlayer( player ) {
+	updatePlayer( player:Player ):Promise<Player> {
 		return new Promise( ( resolve, reject ) => {
 			if( !player.isDirty ) {
 				return resolve();
@@ -76,7 +73,7 @@ export class PlayerProvider {
 	}
 }
 
-function createPlayer( row ) {
+function createPlayer( row ):Player {
 	let player = new Player(
 		row.id,
 		row.name,

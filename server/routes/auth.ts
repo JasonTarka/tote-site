@@ -28,7 +28,7 @@ export function createAuthStrategy() {
 	return passport.authenticate( 'jwt', {session: false} );
 }
 
-function validateSession( userId, sessionKey ) {
+function validateSession( userId:number, sessionKey:string ):Promise<number> {
 	return new Promise( (resolve, reject) => {
 		let provider:AuthProvider = getInstance( AuthProvider );
 

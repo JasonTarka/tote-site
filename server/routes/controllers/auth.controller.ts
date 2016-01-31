@@ -1,7 +1,9 @@
 'use strict';
 import {AuthProvider} from "../../domain/providers/auth.provider";
 import {BadRequest} from "../../utils/errors";
+import {IController} from "./controller";
 import {Forbidden} from "../../utils/errors";
+import {RequestData} from "../requestData";
 import {Route} from "../data/route";
 import {RoutingInfo} from "../data/routingInfo";
 import {UserProvider} from "../../domain/providers/user.provider";
@@ -11,30 +13,22 @@ import {getInstance} from "../../utils/utils";
 
 let jwt = require( 'jsonwebtoken' );
 
-export class AuthController {
+export class AuthController implements IController {
 	constructor() {
 		this.jwtSecret = process.env.TOTE_JWT_SECRET;
 	}
 
 	private jwtSecret: string;
 
-	/**
-	 * @returns {UserProvider}
-	 * @private
-	 */
-	get _provider():UserProvider {
+	private get _provider():UserProvider {
 		return getInstance( UserProvider );
 	}
 
-	/**
-	 * @returns {AuthProvider}
-	 * @private
-	 */
-	get _authProvider():AuthProvider {
+	private get _authProvider():AuthProvider {
 		return getInstance( AuthProvider );
 	}
 
-	login( data ) {
+	login( data:RequestData ):Promise<{token:string}> {
 		let body = data.body;
 
 		if( !body || !body.username || !body.password ) {
@@ -77,7 +71,7 @@ export class AuthController {
 			} );
 	}
 
-	get routing() {
+	get routing():RoutingInfo {
 		return new RoutingInfo(
 			'/auth',
 			[
