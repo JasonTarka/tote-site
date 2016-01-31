@@ -15,6 +15,7 @@ beforeEach( () => {
 } );
 
 afterEach( () => {
+	mockery.deregisterAll();
 	mockery.disable();
 	mockInstances = null;
 } );

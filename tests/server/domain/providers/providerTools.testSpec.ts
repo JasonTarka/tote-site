@@ -1,10 +1,12 @@
 'use strict';
+import {DataObject} from "../../../../server/domain/data/dataObject";
+
 import {generateUpdateStatement} from "../../../../server/domain/providers/providerTools";
 
 describe( 'Provider Tools', () => {
-	let should = require( 'should' )
+	let should = require( 'should' );
 
-	var dataObjectMock;
+	var dataObjectMock:DataObjectMock;
 
 	beforeEach( () => {
 		dataObjectMock = new DataObjectMock();
@@ -99,8 +101,34 @@ describe( 'Provider Tools', () => {
 	} );
 } );
 
-function DataObjectMock() {
-	this.isDirty = true;
-	this.identifierFields = [];
-	this.dirtyFields = new Set();
+class DataObjectMock extends DataObject {
+	constructor() {
+		super({});
+
+		this.isDirty = true;
+		this.identifierFields = [];
+		this.dirtyFields = new Set();
+	}
+
+	id:any;
+	name:any;
+	loginCount:any;
+	parent:any;
+	age:any;
+
+	private _isDirty:boolean;
+	public get isDirty():boolean {
+		return this._isDirty;
+	}
+	public set isDirty( val ) {
+		this._isDirty = val;
+	}
+
+	private _identifierFields:string[];
+	public get identifierFields():string[] {
+		return this._identifierFields;
+	}
+	public set identifierFields( val ) {
+		this._identifierFields = val;
+	}
 }

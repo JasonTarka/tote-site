@@ -122,7 +122,7 @@ describe( 'User data object', () => {
 			const password = 'my new password';
 			user.password = password;
 
-			verifyPassword( user.password, password, 123 )
+			verifyPassword( user.password, password, '123' )
 				.then( result => {
 					result.should.be.false();
 					done();

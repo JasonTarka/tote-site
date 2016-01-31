@@ -2,7 +2,9 @@
 import {NotFound} from "../../../../server/utils/errors";
 import {Permissions} from "../../../../server/utils/enums";
 import {Player} from "../../../../server/domain/data/player";
+import {PlayerController} from "../../../../server/routes/controllers/player.controller";
 import {PlayerProvider} from "../../../../server/domain/providers/player.provider";
+import {User} from "../../../../server/domain/data/user";
 
 import {registerMockInstance} from "../../../testUtils";
 import {requireUncached} from "../../../testUtils";
@@ -22,13 +24,10 @@ describe( 'Player Controller', () => {
 		playerIsActive = true;
 
 	var PlayerController,
-		/** @type {PlayerController} */
-		controller,
+		controller:PlayerController,
 		player:Player,
-		/** @type {PlayerProviderMock} */
-		playerProviderMock,
-		/** @type {UserMock} */
-		user,
+		playerProviderMock:PlayerProviderMock,
+		user:UserMock,
 		data;
 
 	before( () => mockery.enable( {
@@ -231,20 +230,31 @@ describe( 'Player Controller', () => {
 		} );
 	} );
 
-	function PlayerProviderMock() {
-		this.fetchPlayer = id => new Promise( ( resolve, reject ) =>
-			id == player.id
-				? resolve( player )
-				: reject( new NotFound() )
-		);
+	class PlayerProviderMock {
+		fetchPlayer( id ):Promise<Player> {
+			return new Promise( ( resolve, reject ) =>
+				id == player.id
+					? resolve( player )
+					: reject( new NotFound() )
+			);
+		}
 
-		this.createPlayer = function() {};
+		createPlayer() {}
 	}
 
-	function UserMock() {
-		this.hasManagePermission = true;
-		this.hasPermission = () => new Promise( ( resolve, reject ) =>
-			this.hasManagePermission ? resolve() : reject()
-		);
+	class UserMock extends User {
+		constructor() {
+			super();
+
+			this.hasManagePermission = true;
+		}
+
+		hasManagePermission:boolean;
+
+		hasPermission():Promise<void> {
+			return new Promise<void>( ( resolve, reject ) =>
+				this.hasManagePermission ? resolve() : reject()
+			);
+		}
 	}
 } );

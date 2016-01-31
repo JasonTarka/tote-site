@@ -1,4 +1,5 @@
 'use strict';
+import {AuthController} from "../../../../server/routes/controllers/auth.controller";
 import {AuthProvider} from "../../../../server/domain/providers/auth.provider";
 import {AuthSession} from "../../../../server/domain/data/authSession";
 import {Forbidden} from "../../../../server/utils/errors";
@@ -10,7 +11,6 @@ import {requireUncached} from "../../../testUtils";
 
 describe( 'Auth Controller', () => {
 	let should = require( 'should' ),
-		mockery = require( 'mockery' ),
 		sinon = require( 'sinon' ),
 		jwt = require( 'jsonwebtoken' );
 	require( 'should-sinon' );
@@ -20,14 +20,10 @@ describe( 'Auth Controller', () => {
 		jwtSecret = '12345';
 
 	var AuthController,
-		/** @type {AuthController} */
-		controller,
-		/** @type {User} */
-		user,
-		/** @type {UserProviderMock} */
-		userProviderMock,
-		/** @type {AuthProviderMock} */
-		authProviderMock,
+		controller:AuthController,
+		user:User,
+		userProviderMock:UserProviderMock,
+		authProviderMock:AuthProviderMock,
 		data;
 
 	beforeEach( () => {
@@ -59,12 +55,9 @@ describe( 'Auth Controller', () => {
 		AuthController = requireUncached(
 			'server/routes/controllers/auth.controller'
 		).AuthController;
-		controller = new AuthController();
-		controller.jwtSecret = jwtSecret;
-	} );
 
-	afterEach( () => {
-		mockery.deregisterAll();
+		process.env.TOTE_JWT_SECRET = jwtSecret;
+		controller = new AuthController();
 	} );
 
 	describe( 'login', () => {
@@ -130,25 +123,33 @@ describe( 'Auth Controller', () => {
 		} );
 	} );
 
-	function UserProviderMock() {
-		this.user = null;
-		this.tryFetchUserByUsername = username =>
-			new Promise( ( resolve ) => resolve(
+	class UserProviderMock {
+		user:User;
+
+		tryFetchUserByUsername(username) {
+			return new Promise( ( resolve ) => resolve(
 				this.user && this.user.username == username
 					? this.user
 					: null
 			) );
+		}
 	}
 
-	function AuthProviderMock() {
-		this.sessionKey = 'a1b2c3d4';
-		this.createAuthSession =
-			() => new AuthSession(
+	class AuthProviderMock {
+		constructor() {
+			this.sessionKey = 'a1b2c3d4';
+		}
+
+		sessionKey:string;
+
+		createAuthSession() {
+			return new AuthSession(
 				user.id,
 				this.sessionKey,
 				new Date(),
 				new Date( '2030-10-10' ),
 				new Date()
 			);
+		}
 	}
 } );

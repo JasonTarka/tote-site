@@ -33,13 +33,13 @@
       "commit": "df712b17fa4737fdb3eb52118b1465cd3be81a1d"
     },
     "should/should.d.ts": {
-      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
+      "commit": "3d2f9971a107e2eee2de3ec5318f5c54071e16ed"
     },
     "mocha/mocha.d.ts": {
       "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
     },
     "sinon/sinon.d.ts": {
-      "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"
+      "commit": "3d2f9971a107e2eee2de3ec5318f5c54071e16ed"
     },
     "mockery/mockery.d.ts": {
       "commit": "531a2f3040eed555898fd7ac9fcd88f4e0d06e27"

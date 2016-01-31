@@ -14,7 +14,7 @@ export function hashPassword( password:string, salt:string ):string {
 	return hash;
 }
 
-export function verifyPassword( hash, password:string, salt:string ):boolean {
+export function verifyPassword( hash, password:string, salt:string ):Promise<boolean> {
 	if( typeof hash === 'string' ) {
 		hash = new Buffer( hash, 'base64' );
 	} else if( !(hash instanceof Buffer) ) {

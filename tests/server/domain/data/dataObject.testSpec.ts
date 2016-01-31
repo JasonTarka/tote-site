@@ -1,11 +1,12 @@
 'use strict';
 import {DataObject} from "../../../../server/domain/data/dataObject";
+///<reference "../../../../typings/should/should.d.ts" />
 
 describe( 'Data Object', () => {
 	let should = require( 'should' );
 
 	/** @type {DataObject} */
-	var dataObject;
+	var dataObject; // Not assigning a type so we can test protected functions
 
 	const initialData = {
 		id: 12,
