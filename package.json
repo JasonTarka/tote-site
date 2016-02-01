@@ -5,9 +5,9 @@
   "main": "server/index.js",
   "scripts": {
     "install": "tsd install",
-    "test": "echo || (mocha ./tests/**/*.testSpec.js && eslint server/** tests/**)",
+    "test": "mocha ./tests/**/*.testSpec.js",
     "start": "node server/index.js",
-    "lint": "",
+    "lint": "tslint ./server/**/*.ts ./tests/**/*.ts",
     "validate": "npm ls",
     "build": "tsc"
   },
@@ -40,6 +40,7 @@
     "should-sinon": "0.0.3",
     "sinon": "^1.17.2",
     "tsd": "^0.6.5",
+    "tslint": "^3.3.0",
     "typescript": "^1.7.5",
     "typescript-eslint-parser": "0.1.0-alpha-1"
   },

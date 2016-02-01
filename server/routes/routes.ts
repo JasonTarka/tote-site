@@ -1,3 +1,4 @@
+import {RoutingInfo} from "./data/routingInfo";
 'use strict';
 import {AuthController} from "./controllers/auth.controller";
 import {IController} from "./controllers/controller";
@@ -24,8 +25,7 @@ let controllers:IController[] = [
 
 controllers.forEach( controller => {
 	let router = express.Router(),
-		/** @type {RoutingInfo} */
-		routingInfo = controller.routing,
+		routingInfo:RoutingInfo = controller.routing,
 		configuredParams = new Set();
 
 	routingInfo.routes.forEach( route => {
@@ -70,29 +70,33 @@ controllers.forEach( controller => {
 
 	function setupRouteParams( route ) {
 		let matches = route.match( /[/]:([^:/]*)/g );
-		if( !matches ) return;
+		if( !matches ) {
+			return;
+		}
 
 		matches.map( match => match.replace( '/:', '' ) )
 			.filter( name => !configuredParams.has( name ) )
 			.forEach( name => {
+				/* tslint:disable:no-unused-variable */
 				router.param( name, ( req, res, next, value ) => {
 					util.log( 'Route param "%s" passed with value "%s"', name, value );
 					req.routeParams = req.routeParams || {};
 					req.routeParams[name] = value;
 					next();
 				} );
+				/* tslint:enable:no-unused-variable */
 				configuredParams.add( name );
 			} );
 	}
 } );
 
 function handleRequest( req, res, next, controller:IController, handler:Function ) {
-	let data:RequestData = {
+	let requestData:RequestData = {
 			routeParams: req.routeParams,
 			body: req.body,
 			user: req.user
 		},
-		result = handler.call( controller, data );
+		result = handler.call( controller, requestData );
 
 	if( result instanceof Promise ) {
 		return result.then( val => res.send( convertResult( val ) ) )

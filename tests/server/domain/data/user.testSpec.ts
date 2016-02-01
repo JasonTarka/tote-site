@@ -5,8 +5,6 @@ import {Permission} from "../../../../server/domain/data/permission";
 import {User} from "../../../../server/domain/data/user";
 import {UserProvider} from "../../../../server/domain/providers/user.provider";
 
-import {generateRandomString} from "../../../../server/utils/utils";
-import {getInstance} from "../../../../server/utils/utils";
 import {registerMockInstance} from "../../../testUtils";
 import {requireUncached} from "../../../testUtils";
 import {setToArray} from "../../../../server/utils/utils";
@@ -107,10 +105,10 @@ describe( 'User data object', () => {
 		} );
 
 		it( 'validates with the new password and salt', done => {
-			const password = 'my new password';
-			user.password = password;
+			const newPassword = 'my new password';
+			user.password = newPassword;
 
-			verifyPassword( user.password, password, user.salt )
+			verifyPassword( user.password, newPassword, user.salt )
 				.then( result => {
 					result.should.be.true();
 					done();
@@ -119,10 +117,10 @@ describe( 'User data object', () => {
 		} );
 
 		it( 'should not validate with the wrong salt', done => {
-			const password = 'my new password';
-			user.password = password;
+			const newPassword = 'my new password';
+			user.password = newPassword;
 
-			verifyPassword( user.password, password, '123' )
+			verifyPassword( user.password, newPassword, '123' )
 				.then( result => {
 					result.should.be.false();
 					done();
@@ -210,8 +208,6 @@ describe( 'User data object', () => {
 
 	class UserProviderMock {
 		constructor() {
-			let Permission = require( '../../../../server/domain/data/permission' );
-
 			this.permissionsForUser = [];
 		}
 

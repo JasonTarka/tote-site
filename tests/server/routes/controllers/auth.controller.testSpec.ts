@@ -126,9 +126,9 @@ describe( 'Auth Controller', () => {
 	class UserProviderMock {
 		user:User;
 
-		tryFetchUserByUsername(username) {
+		tryFetchUserByUsername( usernameToFind ) {
 			return new Promise( ( resolve ) => resolve(
-				this.user && this.user.username == username
+				this.user && this.user.username === usernameToFind
 					? this.user
 					: null
 			) );

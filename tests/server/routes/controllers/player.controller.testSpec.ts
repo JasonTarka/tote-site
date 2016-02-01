@@ -90,7 +90,9 @@ describe( 'Player Controller', () => {
 					() => done( new Error( 'Should have been rejected' ) )
 				)
 				.catch( err => {
-					if( err ) return done( err );
+					if( err ) {
+						return done( err );
+					}
 
 					user.hasPermission
 						.should.be.calledWith( requiredPermission );
@@ -221,7 +223,9 @@ describe( 'Player Controller', () => {
 					() => done( new Error( 'Should have been rejected' ) )
 				)
 				.catch( err => {
-					if( err ) return done( err );
+					if( err ) {
+						return done( err );
+					}
 
 					user.hasPermission
 						.should.be.calledWith( requiredPermission );
@@ -233,7 +237,7 @@ describe( 'Player Controller', () => {
 	class PlayerProviderMock {
 		fetchPlayer( id ):Promise<Player> {
 			return new Promise( ( resolve, reject ) =>
-				id == player.id
+				id === player.id
 					? resolve( player )
 					: reject( new NotFound() )
 			);

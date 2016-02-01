@@ -2,7 +2,6 @@
 import {api} from "./routes/routes";
 import {HttpError} from "./utils/errors";
 import {NotFound} from "./utils/errors";
-import {Router} from "express";
 
 let express = require( 'express' ),
 	logger = require( 'morgan' ),
@@ -16,6 +15,7 @@ app.use( logger( 'dev' ) );
 app.use( bodyParser.json() );
 app.use( '/api', api );
 
+/* tslint:disable:no-unused-variable */
 // Handle anything that doesn't have a route
 app.use( ( req, res, next ) => {
 	let err = new NotFound( 'Route does not exist' );
@@ -23,11 +23,9 @@ app.use( ( req, res, next ) => {
 } );
 
 // General error handler
-app.use( ( err:HttpError, req, res, next ) => { // eslint-disable-line no-unused-vars
-	/* eslint-disable no-console */
+app.use( ( err:HttpError, req, res, next ) => {
 	console.error( err.message );
 	console.error( err.stack );
-	/* eslint-enable no-console */
 
 	var ret: any = {
 		error: err.name,
@@ -41,6 +39,8 @@ app.use( ( err:HttpError, req, res, next ) => { // eslint-disable-line no-unused
 	res.status( err.status || 500 )
 		.send( ret );
 } );
+
+/* tslint:enable:no-unused-variable */
 
 // Start the server
 let server = app.listen( 3000, () => {
