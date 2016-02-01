@@ -25,23 +25,23 @@ export class User extends DataObject {
 	}
 
 	get data() {
-		let data: any = this._getFieldVals();
+		let data:any = this._getFieldVals();
 		delete data.password;
 		delete data.salt;
 		return data;
 	}
 
 	// ----- id -----
-	get id(): number {
+	get id():number {
 		return this._getFieldVal( 'id' );
 	}
 
 	// ----- username -----
-	get username(): string {
+	get username():string {
 		return this._getFieldVal( 'username' );
 	}
 
-	set username( val: string ) {
+	set username( val:string ) {
 		if( !val ) {
 			throw new InvalidParameter( '"username" must not be empty' );
 		}
@@ -56,7 +56,7 @@ export class User extends DataObject {
 	}
 
 	// ----- password -----
-	get password(): string {
+	get password():string {
 		return this._getFieldVal( 'password' );
 	}
 
@@ -79,12 +79,12 @@ export class User extends DataObject {
 	}
 
 	// ----- salt -----
-	get salt(): string {
+	get salt():string {
 		return this._getFieldVal( 'salt' );
 	}
 
 	// ----- player ID -----
-	get playerId(): number {
+	get playerId():number {
 		return this._getFieldVal( 'playerId' );
 	}
 

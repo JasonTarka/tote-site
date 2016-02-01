@@ -103,7 +103,7 @@ describe( 'Provider Tools', () => {
 
 class DataObjectMock extends DataObject {
 	constructor() {
-		super({});
+		super( {} );
 
 		this.isDirty = true;
 		this.identifierFields = [];

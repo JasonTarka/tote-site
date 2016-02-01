@@ -131,9 +131,9 @@ describe( 'User data object', () => {
 
 	describe( 'dirtying fields', () => {
 		[
-			{field: 'username', val: 'another_username'},
-			{field: 'password', val: 'another password'},
-			{field: 'playerId', val: 34}
+			{ field: 'username', val: 'another_username' },
+			{ field: 'password', val: 'another password' },
+			{ field: 'playerId', val: 34 }
 		].forEach( change => {
 			it( 'should mark ' + change.field + ' as dirty', () => {
 				user[change.field] = change.val;

@@ -84,8 +84,8 @@ describe( 'Data Object', () => {
 			dataObject.isDirty.should.be.false();
 			Object.keys( data ).forEach( field => {
 				should( dataObject._getFieldVal( field ) ).be.undefined();
-			});
-		});
+			} );
+		} );
 
 		it( 'does not set identifier fields', () => {
 			let data:any = {
@@ -112,7 +112,7 @@ describe( 'Data Object', () => {
 			dataObject._getFieldVal( 'name' )
 				.should.equal( data.name );
 			dataObject.isDirty.should.be.true();
-		});
+		} );
 	} );
 } );
 

@@ -14,9 +14,9 @@ export class AuthProvider {
 			: 300;
 	}
 
-	private _sessionLength: number;
+	private _sessionLength:number;
 
-	private get _db(): Database {
+	private get _db():Database {
 		return Database.instance;
 	}
 
@@ -44,7 +44,7 @@ export class AuthProvider {
 			.then( () => this.fetchAuthSession( userId, sessionKey ) );
 	}
 
-	fetchAuthSession( userId:number, sessionKey:string ): Promise<AuthSession> {
+	fetchAuthSession( userId:number, sessionKey:string ):Promise<AuthSession> {
 		let sql = 'SELECT userId, sessionKey, dateCreated, ' +
 				  'validUntilDate, lastUsedDate' +
 				  ' FROM user_auth_sessions' +
@@ -53,7 +53,7 @@ export class AuthProvider {
 			params = [userId, sessionKey];
 
 		return this._db.executeQuery( sql, params )
-			.then( (rows: any[]) => {
+			.then( ( rows:any[] ) => {
 				if( !rows || !rows.length ) {
 					throw new Forbidden();
 				}

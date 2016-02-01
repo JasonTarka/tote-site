@@ -6,7 +6,7 @@ import {Permission} from "../data/permission";
 
 export class UserProvider {
 
-	private get _db(): Database {
+	private get _db():Database {
 		return Database.instance;
 	}
 

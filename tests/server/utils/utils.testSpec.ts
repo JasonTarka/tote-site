@@ -72,7 +72,7 @@ describe( 'utils', () => {
 					'hello': ['bonjour', 'bon jour', 'hello', 'salut', 'aloha'],
 					'goodbye': [
 						'au revoir', 'goodbye!',
-						{ english: [ 'good bye' ] },
+						{ english: ['good bye'] },
 						{ spanish: [] }
 					]
 				}

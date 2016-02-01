@@ -12,13 +12,13 @@ export class AuthSession {
 		this.lastUsed = new Date( lastUsed );
 	}
 
-	userId: number;
-	sessionKey: string;
-	dateCreated: Date;
-	validUntil: Date;
-	lastUsed: Date;
+	userId:number;
+	sessionKey:string;
+	dateCreated:Date;
+	validUntil:Date;
+	lastUsed:Date;
 
-	get isValid(): boolean {
+	get isValid():boolean {
 		let now = new Date();
 		return now < this.validUntil;
 	}

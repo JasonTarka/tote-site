@@ -3,7 +3,7 @@
 import crypto = require( 'crypto' );
 
 export function getInstance( type ) {
-	var self: any = getInstance;
+	var self:any = getInstance;
 
 	if( !self.instances ) {
 		self.instances = new WeakMap();

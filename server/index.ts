@@ -27,7 +27,7 @@ app.use( ( err:HttpError, req, res, next ) => {
 	console.error( err.message );
 	console.error( err.stack );
 
-	var ret: any = {
+	var ret:any = {
 		error: err.name,
 		reason: err.message
 	};

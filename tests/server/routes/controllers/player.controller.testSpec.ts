@@ -131,11 +131,11 @@ describe( 'Player Controller', () => {
 
 		describe( 'single properties changed', () => {
 			[
-				{prop: 'name', value: 'Yoda'},
-				{prop: 'email', value: 'yoda@example.org'},
-				{prop: 'bio', value: 'A Jedi on a far away planet'},
-				{prop: 'imgPath', value: '/path/to/another.jpeg'},
-				{prop: 'isActive', value: false}
+				{ prop: 'name', value: 'Yoda' },
+				{ prop: 'email', value: 'yoda@example.org' },
+				{ prop: 'bio', value: 'A Jedi on a far away planet' },
+				{ prop: 'imgPath', value: '/path/to/another.jpeg' },
+				{ prop: 'isActive', value: false }
 			].forEach( x =>
 				it( 'only updates changed property, ' + x.prop, done => {
 					data.body = {};

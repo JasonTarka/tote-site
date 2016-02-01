@@ -7,7 +7,7 @@ import {generateUpdateStatement} from "./providerTools";
 
 export class PlayerProvider {
 
-	private get _db(): Database {
+	private get _db():Database {
 		return Database.instance;
 	}
 

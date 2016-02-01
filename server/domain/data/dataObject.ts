@@ -12,19 +12,19 @@ export class DataObject {
 		_data.set( this, data );
 	}
 
-	dirtyFields: Set<string>;
+	dirtyFields:Set<string>;
 
 	markClean() {
 		this.dirtyFields = new Set();
 	}
 
-	get isDirty(): boolean {
+	get isDirty():boolean {
 		return !!this.dirtyFields.size;
 	}
 
 	/***** Methods/Properties to be overridden *****/
 
-	get data(): Object {
+	get data():Object {
 		throw new FunctionNotImplemented();
 	}
 
@@ -32,28 +32,28 @@ export class DataObject {
 	 * An array of fields that are used as identifiers for this object.
 	 * eg: primary keys in the database
 	 */
-	get identifierFields(): string[] {
+	get identifierFields():string[] {
 		throw new FunctionNotImplemented();
 	}
 
 	/**
 	 * An array containing all fields this object contains.
 	 */
-	get fieldNames(): string[] {
-		return Object.keys( _data.get(this) );
+	get fieldNames():string[] {
+		return Object.keys( _data.get( this ) );
 	}
 
 	/**
 	 * Update field values in this object using the matching fields from a
 	 * hash-object.
 	 */
-	updateFieldVals( data: Object ) {
-		let idFields: string[] = this.identifierFields;
+	updateFieldVals( data:Object ) {
+		let idFields:string[] = this.identifierFields;
 
 		this.fieldNames
 			.filter(
-				x =>  data.hasOwnProperty(x)
-					  && idFields.indexOf( x ) < 0
+				x => data.hasOwnProperty( x )
+					 && idFields.indexOf( x ) < 0
 			)
 			.forEach(
 				field => this[field] = data[field]
@@ -62,21 +62,21 @@ export class DataObject {
 
 	/***** Private/Protected methods *****/
 
-	protected _markDirty( field: string ) {
+	protected _markDirty( field:string ) {
 		if( !this.dirtyFields.has( field ) ) {
 			this.dirtyFields.add( field );
 		}
 	}
 
-	protected _getFieldVal( field: string ) {
+	protected _getFieldVal( field:string ) {
 		return _data.get( this )[field];
 	}
 
-	protected _getFieldVals():{}  {
+	protected _getFieldVals():{} {
 		return clone( _data.get( this ) );
 	}
 
-	protected _setFieldVal( field: string, value ) {
+	protected _setFieldVal( field:string, value ) {
 		let data = _data.get( this );
 		if( data[field] === value ) {
 			return;

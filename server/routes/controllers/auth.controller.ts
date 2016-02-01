@@ -18,7 +18,7 @@ export class AuthController implements IController {
 		this.jwtSecret = process.env.TOTE_JWT_SECRET;
 	}
 
-	private jwtSecret: string;
+	private jwtSecret:string;
 
 	private get _provider():UserProvider {
 		return getInstance( UserProvider );
@@ -80,7 +80,7 @@ export class AuthController implements IController {
 					this.login,
 					'POST'
 				)
-	        ]
+			]
 		);
 	}
 }

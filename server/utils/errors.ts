@@ -5,7 +5,7 @@ export class HttpError extends Error {
 		super( message );
 	}
 
-	status: number;
+	status:number;
 }
 
 /***** 4xx *****/
