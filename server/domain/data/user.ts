@@ -31,6 +31,10 @@ export class User extends DataObject {
 		return data;
 	}
 
+	public get identifierFields():string[] {
+		return ['id'];
+	}
+
 	// ----- id -----
 	get id():number {
 		return this._getFieldVal( 'id' );
@@ -92,6 +96,16 @@ export class User extends DataObject {
 		this._setFieldVal( 'playerId', val );
 	}
 
+	public save():Promise<User> {
+		if( !this.id ) {
+			throw new Error( 'Cannot create user' );
+		}
+
+		let provider:UserProvider = getInstance( UserProvider );
+		return provider.updateUser( this )
+			.then( () => this );
+	}
+
 	/**
 	 * Checks if the user has a given permission or not.
 	 * Resolves the promise if the permission is available, and rejects it
@@ -120,7 +134,7 @@ export class User extends DataObject {
 			} else if( _permissions.get( this ).has( permissionId ) ) {
 				resolve();
 			} else {
-				reject();
+				reject( new NotAuthorized() );
 			}
 		} );
 	}

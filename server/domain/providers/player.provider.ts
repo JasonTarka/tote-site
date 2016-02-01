@@ -3,8 +3,6 @@ import {Database} from "./database";
 import {NotFound} from "../../utils/errors";
 import {Player} from "../data/player";
 
-import {generateUpdateStatement} from "./providerTools";
-
 export class PlayerProvider {
 
 	private get _db():Database {
@@ -29,7 +27,7 @@ export class PlayerProvider {
 		return new Promise( ( resolve, reject ) => {
 			this._db.executeQuery( sql, [playerId] )
 				.then( players => {
-					if( !players || players.length == 0 ) {
+					if( !players || players.length === 0 ) {
 						return reject(
 							new NotFound( 'Player not found' )
 						);
@@ -55,21 +53,8 @@ export class PlayerProvider {
 			.then( newId => this.fetchPlayer( newId ) );
 	}
 
-	updatePlayer( player:Player ):Promise<Player> {
-		return new Promise( ( resolve, reject ) => {
-			if( !player.isDirty ) {
-				return resolve();
-			}
-
-			let statement = generateUpdateStatement( player, 'players' );
-
-			this._db.executeNonQuery( statement.sql, statement.params )
-				.then( () => {
-					player.markClean();
-					resolve();
-				} )
-				.catch( reject );
-		} );
+	updatePlayer( player:Player ):Promise<void> {
+		return this._db.updateDataObject( player, 'players' );
 	}
 }
 

@@ -1,17 +1,18 @@
 'use strict';
+import {NotAuthorized} from "../../../../server/utils/errors";
 import {NotFound} from "../../../../server/utils/errors";
 import {Permissions} from "../../../../server/utils/enums";
 import {Player} from "../../../../server/domain/data/player";
 import {PlayerController} from "../../../../server/routes/controllers/player.controller";
 import {PlayerProvider} from "../../../../server/domain/providers/player.provider";
-import {User} from "../../../../server/domain/data/user";
+import {RequestData} from "../../../../server/routes/requestData";
+import {UserMock} from "../../../testUtils";
 
 import {registerMockInstance} from "../../../testUtils";
 import {requireUncached} from "../../../testUtils";
 
 describe( 'Player Controller', () => {
 	let should = require( 'should' ),
-		mockery = require( 'mockery' ),
 		sinon = require( 'sinon' );
 	require( 'should-sinon' );
 
@@ -28,15 +29,7 @@ describe( 'Player Controller', () => {
 		player:Player,
 		playerProviderMock:PlayerProviderMock,
 		user:UserMock,
-		data;
-
-	before( () => mockery.enable( {
-		warnOnUnregistered: false
-	} ) );
-
-	after( () => {
-		mockery.disable();
-	} );
+		data:RequestData;
 
 	beforeEach( () => {
 		player = new Player(
@@ -76,8 +69,6 @@ describe( 'Player Controller', () => {
 		controller = new PlayerController();
 	} );
 
-	afterEach( () => mockery.deregisterAll() );
-
 	describe( 'update', () => {
 		it( 'enforces Manage Players permission', done => {
 			const requiredPermission = Permissions.ManagePlayers;
@@ -90,14 +81,12 @@ describe( 'Player Controller', () => {
 					() => done( new Error( 'Should have been rejected' ) )
 				)
 				.catch( err => {
-					if( err ) {
-						return done( err );
-					}
-
+					should( err ).be.instanceOf( NotAuthorized );
 					user.hasPermission
 						.should.be.calledWith( requiredPermission );
 					done();
-				} );
+				} )
+				.catch( done );
 		} );
 
 		it( 'updates user properties', done => {
@@ -223,14 +212,13 @@ describe( 'Player Controller', () => {
 					() => done( new Error( 'Should have been rejected' ) )
 				)
 				.catch( err => {
-					if( err ) {
-						return done( err );
-					}
+					should( err ).be.instanceOf( NotAuthorized );
 
 					user.hasPermission
 						.should.be.calledWith( requiredPermission );
 					done();
-				} );
+				} )
+				.catch( done );
 		} );
 	} );
 
@@ -244,21 +232,5 @@ describe( 'Player Controller', () => {
 		}
 
 		createPlayer() {}
-	}
-
-	class UserMock extends User {
-		constructor() {
-			super();
-
-			this.hasManagePermission = true;
-		}
-
-		hasManagePermission:boolean;
-
-		hasPermission():Promise<void> {
-			return new Promise<void>( ( resolve, reject ) =>
-				this.hasManagePermission ? resolve() : reject()
-			);
-		}
 	}
 } );

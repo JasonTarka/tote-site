@@ -1,15 +1,20 @@
 'use strict';
+import {NotAuthorized} from "../server/utils/errors";
+import {User} from "../server/domain/data/user";
+
 import {generateRandomString} from "../server/utils/utils";
 import {getInstance} from "../server/utils/utils";
 
 let mockery = require( 'mockery' );
 
 let utilsMocked:boolean = false,
+	keepCachedMocked:boolean = false,
 	mockInstances:Map<string, Object>;
 beforeEach( () => {
 	mockery.enable( {
 		warnOnUnregistered: false
 	} );
+	keepCachedMocked = false;
 	utilsMocked = false;
 	mockInstances = new Map();
 } );
@@ -49,7 +54,43 @@ export function registerMockInstance(
 }
 
 export function requireUncached( path:string ) {
+	const keepCached:string[] = [
+		'../server/utils/errors'
+	];
+
+	if( !keepCachedMocked ) {
+		keepCached.forEach( x => mockery.registerMock( x, require( x ) ) );
+		keepCachedMocked = true;
+	}
+
 	path = '../' + path;
 	mockery.registerAllowable( path, true );
 	return require( path );
+}
+
+export class UserMock extends User {
+	constructor( userId?:number ) {
+		super();
+
+		this._userId = userId;
+		this.hasManagePermission = true;
+	}
+
+	private _userId:number;
+
+	get id():number {
+		return this._userId;
+	}
+
+	set id( val:number ) {
+		this._userId = val;
+	}
+
+	hasManagePermission:boolean;
+
+	hasPermission():Promise<void> {
+		return new Promise<void>( ( resolve, reject ) =>
+			this.hasManagePermission ? resolve() : reject( new NotAuthorized() )
+		);
+	}
 }

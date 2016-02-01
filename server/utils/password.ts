@@ -2,8 +2,12 @@
 
 let scrypt = require( 'scrypt' );
 
+// Maximum time to spend hashing (in seconds)
+const MAX_TIME:number = process.env.TOTE_PASSWORD_TIME
+	? parseFloat( process.env.TOTE_PASSWORD_TIME )
+	: 0.9;
+
 export function hashPassword( password:string, salt:string ):string {
-	const MAX_TIME = 0.9; // Maximum time to spend hashing (in seconds)
 
 	password = saltPassword( password, salt );
 

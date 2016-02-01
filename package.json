@@ -7,7 +7,7 @@
     "install": "tsd install",
     "test": "mocha ./tests/**/*.testSpec.js",
     "start": "node server/index.js",
-    "lint": "tslint ./server/**/*.ts ./tests/**/*.ts",
+    "lint": "tslint ./{server,tests}/*{,*/}{,*/}{,*/}{,*/}/*.ts",
     "validate": "npm ls",
     "build": "tsc"
   },

@@ -1,6 +1,9 @@
 'use strict';
+import {DataObject} from "../data/dataObject";
 import {IMySql} from "mysql";
 import {IPool} from "mysql";
+
+import {generateUpdateStatement} from "./providerTools";
 
 let mysql:IMySql = require( 'mysql' );
 
@@ -72,6 +75,24 @@ export class Database {
 		return new Promise( ( resolve, reject ) => {
 			this.executeQuery( sql, params )
 				.then( () => resolve() )
+				.catch( reject );
+		} );
+	}
+
+
+	public updateDataObject( obj:DataObject, table:string ):Promise<void> {
+		return new Promise<void>( ( resolve, reject ) => {
+			if( !obj.isDirty ) {
+				return resolve();
+			}
+
+			let statement = generateUpdateStatement( obj, table );
+
+			this.executeNonQuery( statement.sql, statement.params )
+				.then( () => {
+					obj.markClean();
+					resolve();
+				} )
 				.catch( reject );
 		} );
 	}

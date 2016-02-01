@@ -1,5 +1,6 @@
 'use strict';
 import {IController} from "./controller";
+import {NotAuthorized} from "../../utils/errors";
 import {Permissions} from "../../utils/enums";
 import {RequestData} from "../requestData";
 import {RoutingInfo} from "../data/routingInfo";
@@ -38,6 +39,37 @@ export class UserController implements IController {
 			} );
 	}
 
+	update( data:RequestData ):Promise<User> {
+		let body = data.body,
+			currUser = data.user,
+			userId:number = data.routeParams.user;
+
+		return new Promise( ( resolve, reject ) => {
+			currUser.hasPermission( Permissions.ManageUsers )
+				.then( () => this._provider.fetchUser( userId ) )
+				.then( user => {
+					user.updateFieldVals( body );
+					return user.save();
+				} )
+				.catch( err => {
+					if( !(err instanceof NotAuthorized)
+						|| currUser.id !== userId
+						|| !body.password
+					) {
+						return reject( err );
+					}
+
+					this._provider.fetchUser( userId )
+						.then( user => {
+							user.password = body.password;
+							return user.save();
+						} );
+				} )
+				.then( resolve )
+				.catch( reject );
+		} );
+	}
+
 	get routing():RoutingInfo {
 		return new RoutingInfo(
 			'/users',
@@ -49,15 +81,21 @@ export class UserController implements IController {
 					true
 				),
 				new Route(
+					'/',
+					this.create,
+					'POST',
+					true
+				),
+				new Route(
 					'/:user',
 					this.view,
 					'GET',
 					true
 				),
 				new Route(
-					'/',
-					this.create,
-					'POST',
+					'/:user',
+					this.update,
+					'PATCH',
 					true
 				)
 			]

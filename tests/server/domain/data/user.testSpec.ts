@@ -204,6 +204,27 @@ describe( 'User data object', () => {
 				} )
 				.catch( done );
 		} );
+
+		it( 'rejects with NotAuthorized on the second call', done => {
+			userProviderMock.permissionsForUser.push( 2 );
+
+			user.hasPermission( 3 )
+				.then( () => done(
+					new Error( 'Should not have had permission' )
+				) )
+				.catch( err => {
+					should( err ).be.instanceof( NotAuthorized );
+					return user.hasPermission( 3 )
+						.then( () => done(
+							new Error( 'Should not have had permission' )
+						) )
+						.catch( secondErr => {
+							should( secondErr ).be.instanceof( NotAuthorized );
+							done();
+						} );
+				} )
+				.catch( done );
+		} );
 	} );
 
 	class UserProviderMock {

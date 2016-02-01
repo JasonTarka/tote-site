@@ -213,8 +213,10 @@ Create a new User.
 
 Fetch the information for an individual User.
 
-#### Planned: `PATCH /api/users/:user` (Authenticated)
+#### `PATCH /api/users/:user` (Authenticated)
 *Requires **Manage Users** permission*
+**NOTE:** Users do not require any permissions to update their password using
+this route.
 
 Update a user.
 

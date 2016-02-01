@@ -5,6 +5,13 @@
       "arguments",
       "statements"
     ],
+    "ban": [
+      true,
+      ["console","log"],
+      ["console","info"],
+      ["describe","only"],
+      ["it","only"]
+    ],
     "class-name": true,
     "comment-format": [
       true,
@@ -15,7 +22,14 @@
     "indent": "tabs",
     "no-any": false,
     "no-conditional-assignment": true,
-    "no-console": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
     "no-debugger": true,
     "no-duplicate-key": true,
     "no-eval": true,

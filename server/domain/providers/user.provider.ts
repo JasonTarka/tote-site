@@ -37,7 +37,7 @@ export class UserProvider {
 		return new Promise( ( resolve, reject ) => {
 			this._db.executeQuery( sql, [userId] )
 				.then( users => {
-					if( !users || users.length == 0 ) {
+					if( !users || users.length === 0 ) {
 						return reject(
 							new NotFound( 'User not found' )
 						);
@@ -58,7 +58,7 @@ export class UserProvider {
 		return new Promise( ( resolve, reject ) => {
 			this._db.executeQuery( sql, [username] )
 				.then( users => {
-					if( !users || users.length == 0 ) {
+					if( !users || users.length === 0 ) {
 						return resolve( null );
 					}
 					resolve( createUser( users[0] ) );
@@ -73,6 +73,10 @@ export class UserProvider {
 
 		return this._db.executeQuery( sql, params )
 			.then( rows => rows.map( createPermission ) );
+	}
+
+	public updateUser( user:User ):Promise<void> {
+		return this._db.updateDataObject( user, 'users' );
 	}
 }
 
