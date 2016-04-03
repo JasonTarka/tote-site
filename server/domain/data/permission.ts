@@ -1,8 +1,9 @@
 'use strict';
 import {DataObject} from './dataObject';
+import {ID} from "../../types/types";
 
 export class Permission extends DataObject {
-	constructor( id:number, name:string ) {
+	constructor( id:ID, name:string ) {
 		super( {
 			id: id,
 			name: name
@@ -16,7 +17,7 @@ export class Permission extends DataObject {
 		};
 	}
 
-	get id():number {
+	get id():ID {
 		return this._getFieldVal( 'id' );
 	}
 

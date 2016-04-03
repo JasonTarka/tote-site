@@ -1,4 +1,5 @@
 'use strict';
+import {ID} from "../../../../server/types/types";
 import {NotAuthorized} from "../../../../server/utils/errors";
 import {NotFound} from "../../../../server/utils/errors";
 import {Permissions} from "../../../../server/utils/enums";
@@ -15,7 +16,7 @@ describe( 'User Controller', () => {
 	let should = require( 'should' ),
 		sinon = require( 'sinon' );
 
-	const userId = 78,
+	const userId:ID = 78,
 		username = 'admiral.ackbar',
 		password = '12345',
 		salt = 'abcde',
@@ -32,7 +33,7 @@ describe( 'User Controller', () => {
 		data:RequestData;
 
 	beforeEach( () => {
-		currUser = new UserMock( userId + 1 );
+		currUser = new UserMock( <number>userId + 1 );
 
 		userProviderMock = new UserProviderMock();
 		registerMockInstance( UserProvider, userProviderMock );
@@ -152,7 +153,7 @@ describe( 'User Controller', () => {
 	} );
 
 	class UserProviderMock {
-		fetchUser( id:number ) {
+		fetchUser( id:ID ) {
 			return new Promise( ( resolve, reject ) =>
 				id === userId ? resolve( user ) : reject( new NotFound() )
 			);

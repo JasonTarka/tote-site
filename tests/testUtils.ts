@@ -1,4 +1,5 @@
 'use strict';
+import {ID} from "../server/types/types";
 import {NotAuthorized} from "../server/utils/errors";
 import {User} from "../server/domain/data/user";
 
@@ -69,20 +70,20 @@ export function requireUncached( path:string ) {
 }
 
 export class UserMock extends User {
-	constructor( userId?:number ) {
+	constructor( userId?:ID ) {
 		super();
 
 		this._userId = userId;
 		this.hasManagePermission = true;
 	}
 
-	private _userId:number;
+	private _userId:ID;
 
-	get id():number {
+	get id():ID {
 		return this._userId;
 	}
 
-	set id( val:number ) {
+	set id( val:ID ) {
 		this._userId = val;
 	}
 

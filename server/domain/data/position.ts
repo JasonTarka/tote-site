@@ -1,9 +1,10 @@
 'use strict';
 import {DataObject} from "./dataObject";
+import {ID} from "../../types/types";
 import {InvalidParameter} from "../../utils/errors";
 
 export class Position extends DataObject {
-	constructor( id?:number, name?:string, sortOrder?:number ) {
+	constructor( id?:ID, name?:string, sortOrder?:number ) {
 		super( {
 			id: id,
 			name: name,
@@ -19,7 +20,7 @@ export class Position extends DataObject {
 
 	/***** id *****/
 
-	public get id():number {
+	public get id():ID {
 		return this._getFieldVal( 'id' );
 	}
 

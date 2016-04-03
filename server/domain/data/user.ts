@@ -1,5 +1,7 @@
 'use strict';
 import {DataObject} from "./dataObject";
+import {ID} from "../../types/types";
+import {InputConverter} from "../../utils/inputConverter";
 import {InvalidParameter} from "../../utils/errors";
 import {NotAuthorized} from "../../utils/errors";
 import {UserProvider} from "../providers/user.provider";
@@ -14,7 +16,13 @@ export const MIN_PASSWORD_LENGTH = 8,
 let _permissions = new WeakMap();
 
 export class User extends DataObject {
-	constructor( id?, username?, password?, salt?, playerId? ) {
+	constructor(
+		id?:ID,
+		username?:string,
+		password?:string,
+		salt?:string,
+		playerId?:ID
+	) {
 		super( {
 			id: id,
 			username: username,
@@ -36,7 +44,7 @@ export class User extends DataObject {
 	}
 
 	// ----- id -----
-	get id():number {
+	get id():ID {
 		return this._getFieldVal( 'id' );
 	}
 
@@ -88,11 +96,12 @@ export class User extends DataObject {
 	}
 
 	// ----- player ID -----
-	get playerId():number {
+	get playerId():ID {
 		return this._getFieldVal( 'playerId' );
 	}
 
-	set playerId( val:number ) {
+	set playerId( val:ID ) {
+		val = InputConverter.toId( val, 'playerId' );
 		this._setFieldVal( 'playerId', val );
 	}
 
@@ -113,7 +122,7 @@ export class User extends DataObject {
 	 *
 	 * @param permissionId
 	 */
-	hasPermission( permissionId:number ):Promise<void> {
+	hasPermission( permissionId:ID ):Promise<void> {
 		return new Promise<void>( ( resolve, reject ) => {
 			if( !_permissions.get( this ) ) {
 				let provider:UserProvider = getInstance( UserProvider );

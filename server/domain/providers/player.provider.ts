@@ -1,5 +1,6 @@
 'use strict';
 import {Database} from "./database";
+import {ID} from "../../types/types";
 import {NotFound} from "../../utils/errors";
 import {Player} from "../data/player";
 
@@ -21,7 +22,7 @@ export class PlayerProvider {
 		} );
 	}
 
-	fetchPlayer( playerId ):Promise<Player> {
+	fetchPlayer( playerId:ID ):Promise<Player> {
 		let sql = 'SELECT * FROM players WHERE id = ?';
 
 		return new Promise( ( resolve, reject ) => {

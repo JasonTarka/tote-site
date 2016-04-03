@@ -1,9 +1,10 @@
 'use strict';
 import {DataObject} from "./dataObject";
-import {InvalidParameter} from "../../utils/errors";
+import {ID} from "../../types/types";
+import {InputConverter} from "../../utils/inputConverter";
 
 export class Location extends DataObject {
-	constructor( id:number, name:string, isDefault:boolean ) {
+	constructor( id:ID, name:string, isDefault:boolean ) {
 		super( {
 			id: id,
 			name: name,
@@ -12,25 +13,23 @@ export class Location extends DataObject {
 	}
 
 	/***** Show ID *****/
-	public get showId():number {
+	public get showId():ID {
 		return this._getFieldVal( 'showId' );
 	}
 
 	/***** Position ID *****/
-	public get positionId():number {
+	public get positionId():ID {
 		return this._getFieldVal( 'positionId' );
 	}
 
 	/***** Player ID *****/
-	public get playerId():number {
+	public get playerId():ID {
 		return this._getFieldVal( 'playerId' );
 	}
 
-	public set playerId( val:number ) {
-		if( !isFinite( val ) ) {
-			throw new InvalidParameter( '"playerId" must be a valid ID' );
-		}
+	public set playerId( val:ID ) {
+		val = InputConverter.toId( val, 'playerId' );
 
-		this._setFieldVal( 'playerId', parseInt( val ) );
+		this._setFieldVal( 'playerId', val );
 	}
 }

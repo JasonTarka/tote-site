@@ -1,5 +1,6 @@
 'use strict';
 import {Database} from "./database";
+import {ID} from "../../types/types";
 import {NotFound} from "../../utils/errors";
 import {User} from "../data/user";
 import {Permission} from "../data/permission";
@@ -31,7 +32,7 @@ export class UserProvider {
 		} );
 	}
 
-	fetchUser( userId:number ):Promise<User> {
+	fetchUser( userId:ID ):Promise<User> {
 		let sql = 'SELECT * FROM users WHERE id = ? AND deleted = 0';
 
 		return new Promise( ( resolve, reject ) => {
@@ -67,7 +68,7 @@ export class UserProvider {
 		} );
 	}
 
-	fetchPermissionsForUser( userId:number ):Promise<Permission[]> {
+	fetchPermissionsForUser( userId:ID ):Promise<Permission[]> {
 		let sql = 'SELECT permissionId FROM user_permissions WHERE userId = ?',
 			params = [userId];
 

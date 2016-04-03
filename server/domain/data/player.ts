@@ -1,5 +1,8 @@
 'use strict';
 import {DataObject} from './dataObject';
+import {Email} from "../../types/types";
+import {ID} from "../../types/types";
+import {InputConverter} from "../../utils/inputConverter";
 import {InvalidParameter} from "../../utils/errors";
 import {PlayerProvider} from "../providers/player.provider";
 
@@ -7,9 +10,9 @@ import {getInstance} from "../../utils/utils";
 
 export class Player extends DataObject {
 	constructor(
-		id?:number,
+		id?:ID,
 		name?:string,
-		email?:string,
+		email?:Email,
 		bio?:string,
 		imgPath?:string,
 		isActive?:boolean
@@ -33,7 +36,7 @@ export class Player extends DataObject {
 	}
 
 	// ----- id -----
-	get id():number {
+	get id():ID {
 		return this._getFieldVal( 'id' );
 	}
 
@@ -50,19 +53,14 @@ export class Player extends DataObject {
 	}
 
 	// ----- email -----
-	get email():string {
+	get email():Email {
 		return this._getFieldVal( 'email' );
 	}
 
-	set email( val:string ) {
-		if( val
-			&& typeof val !== 'string'
-			&& !val.match( /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i )
-		) {
-			throw new InvalidParameter( '"email" must be a valid email address' );
-		}
+	set email( val:Email ) {
+		val = InputConverter.toEmail( val, 'email' );
 
-		this._setFieldVal( 'email', val.toString() );
+		this._setFieldVal( 'email', val );
 	}
 
 	// ----- bio -----

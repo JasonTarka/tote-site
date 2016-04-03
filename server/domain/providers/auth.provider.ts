@@ -2,6 +2,7 @@
 import {AuthSession} from "../data/authSession";
 import {Database} from "./database";
 import {Forbidden} from "../../utils/errors";
+import {ID} from "../../types/types";
 
 import {generateRandomString} from "../../utils/utils";
 
@@ -28,7 +29,7 @@ export class AuthProvider {
 		return date;
 	}
 
-	createAuthSession( userId:number ):Promise<AuthSession> {
+	createAuthSession( userId:ID ):Promise<AuthSession> {
 		let sql = 'INSERT INTO user_auth_sessions' +
 				  '(userId, sessionKey, validUntilDate, lastUsedDate)' +
 				  ' VALUES(?,?,?,?)',
@@ -44,7 +45,7 @@ export class AuthProvider {
 			.then( () => this.fetchAuthSession( userId, sessionKey ) );
 	}
 
-	fetchAuthSession( userId:number, sessionKey:string ):Promise<AuthSession> {
+	fetchAuthSession( userId:ID, sessionKey:string ):Promise<AuthSession> {
 		let sql = 'SELECT userId, sessionKey, dateCreated, ' +
 				  'validUntilDate, lastUsedDate' +
 				  ' FROM user_auth_sessions' +
@@ -61,7 +62,7 @@ export class AuthProvider {
 			} );
 	}
 
-	markAuthSessionUsed( userId:number, sessionKey:string ) {
+	markAuthSessionUsed( userId:ID, sessionKey:string ) {
 		let sql = 'UPDATE user_auth_sessions' +
 				  ' SET validUntilDate = ?,' +
 				  ' lastUsedDate = NOW()' +

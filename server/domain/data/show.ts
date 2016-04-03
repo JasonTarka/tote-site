@@ -1,11 +1,12 @@
 'use strict';
 import {DataObject} from "./dataObject";
+import {ID} from "../../types/types";
 import {InvalidParameter} from "../../utils/errors";
 import {ShowPosition} from "./showPosition";
 
 export class Show extends DataObject {
 	constructor(
-		id:number,
+		id:ID,
 		locationId:number,
 		date:Date,
 		tagLine:string,
@@ -21,7 +22,7 @@ export class Show extends DataObject {
 	}
 
 	/***** Show ID *****/
-	public get id():number {
+	public get id():ID {
 		return this._getFieldVal( 'id' );
 	}
 
@@ -43,8 +44,12 @@ export class Show extends DataObject {
 		if( !val ) {
 			throw new InvalidParameter( '"date" cannot be null' );
 		}
-		val = new Date( val );
-		if( isNaN( d.getTime() ) ) {
+
+		let tempVal:any = val;
+		if( typeof tempVal !== 'object' ) {
+			val = new Date( tempVal );
+		}
+		if( isNaN( val.getTime() ) ) {
 			throw new InvalidParameter( '"date" must be a valid date' );
 		}
 
