@@ -7,6 +7,7 @@ import {PositionController} from "./controllers/position.controller";
 import {RequestData} from "./requestData";
 import {Router} from "express";
 import {RoutingInfo} from "./data/routingInfo";
+import {ShowController} from "./controllers/show.controller";
 import {UserController} from "./controllers/user.controller";
 
 import {createAuthStrategy} from "./auth";
@@ -22,6 +23,7 @@ let controllers:IController[] = [
 	getInstance( AuthController ),
 	getInstance( PlayerController ),
 	getInstance( PositionController ),
+	getInstance( ShowController ),
 	getInstance( UserController )
 ];
 
@@ -101,7 +103,8 @@ function handleRequest( req, res, next, controller:IController, handler:Function
 		result = handler.call( controller, requestData );
 
 	if( result instanceof Promise ) {
-		return result.then( val => res.send( convertResult( val ) ) )
+		return result.then( convertResult )
+			.then( x => res.send( x ) )
 			.catch( next );
 	}
 
@@ -109,26 +112,41 @@ function handleRequest( req, res, next, controller:IController, handler:Function
 		return next( result );
 	}
 
-	res.send( convertResult( result ) );
+	convertResult( result )
+		.then( x => res.send( x ) );
 
-	function convertResult( data ) {
-		if( data instanceof DataObject ) {
-			data = data.data;
-			Object.keys( data ).forEach( key => {
-				data[key] = convertResult( data[key] );
-			} );
-		}
+	function convertResult( data ):Promise<any> {
+		return new Promise( resolve => {
+			// Assume that if the first element in the array is a DataObject
+			// then it is an array of DataObjects.
+			if( data instanceof Array
+				&& data.length
+				&& (data[0] instanceof DataObject )
+			) {
+				return Promise.all( data.map( convertResult ) )
+					.then( resolve );
+			}
 
-		// Assume that if the first element in the array is a DataObject
-		// then it is an array of DataObjects.
-		if( data instanceof Array
-			&& data.length
-			&& data[0] instanceof DataObject
-		) {
-			return data.map( convertResult );
-		}
+			if( data instanceof Promise ) {
+				return data.then( convertResult )
+					.then( resolve );
+			}
 
-		return data;
+			if( data instanceof DataObject ) {
+				data = data.data;
+
+				let promises = Object.keys( data ).map(
+					key => convertResult( data[key] )
+						.then( val => val instanceof Promise ? convertResult( val ) : val )
+						.then( val => data[key] = val )
+				);
+
+				return Promise.all( promises )
+					.then( () => resolve( data ) );
+			}
+
+			resolve( data );
+		} );
 	}
 }
 
