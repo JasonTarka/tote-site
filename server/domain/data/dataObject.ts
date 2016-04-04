@@ -25,7 +25,7 @@ export class DataObject {
 	/***** Methods/Properties to be overridden *****/
 
 	get data():Object {
-		throw new FunctionNotImplemented();
+		return this._getFieldVals();
 	}
 
 	/**

@@ -9,7 +9,8 @@
     "start": "node server/index.js",
     "lint": "tslint ./{server,tests}/*{,*/}{,*/}{,*/}{,*/}/*.ts",
     "validate": "npm ls",
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "mocha": "^2.3.4",
     "mockery": "^1.4.0",
     "node-gyp": "^3.2.1",
+    "nodemon": "^1.9.1",
     "precommit-hook-eslint": "^3.0.0",
     "should": "^8.0.2",
     "should-sinon": "0.0.3",

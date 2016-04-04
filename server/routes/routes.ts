@@ -113,7 +113,10 @@ function handleRequest( req, res, next, controller:IController, handler:Function
 
 	function convertResult( data ) {
 		if( data instanceof DataObject ) {
-			return data.data;
+			data = data.data;
+			Object.keys( data ).forEach( key => {
+				data[key] = convertResult( data[key] );
+			} );
 		}
 
 		// Assume that if the first element in the array is a DataObject
@@ -122,7 +125,7 @@ function handleRequest( req, res, next, controller:IController, handler:Function
 			&& data.length
 			&& data[0] instanceof DataObject
 		) {
-			return data.map( x => x.data );
+			return data.map( convertResult );
 		}
 
 		return data;
