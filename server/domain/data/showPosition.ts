@@ -1,7 +1,12 @@
 'use strict';
+
 import {DataObject} from "./dataObject";
 import {ID} from "../../types/types";
 import {InputConverter} from "../../utils/inputConverter";
+import {PlayerProvider} from "../providers/player.provider";
+import {PositionProvider} from "../providers/position.provider";
+
+import {getInstance} from "../../utils/utils";
 
 export class ShowPosition extends DataObject {
 	constructor( showId:ID, positionId:ID, playerId?:ID ) {
@@ -10,6 +15,17 @@ export class ShowPosition extends DataObject {
 			positionId: positionId,
 			playerId: playerId
 		} );
+	}
+
+	get data():any {
+		let playerProvider:PlayerProvider = getInstance( PlayerProvider ),
+			positionProvider:PositionProvider = getInstance( PositionProvider );
+
+		let data = {
+			player: playerProvider.fetchPlayer( this.playerId ),
+			position: positionProvider.fetchPosition( this.positionId )
+		};
+		return data;
 	}
 
 	/***** Show ID *****/
