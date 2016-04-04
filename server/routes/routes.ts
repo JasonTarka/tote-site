@@ -1,11 +1,12 @@
-import {RoutingInfo} from "./data/routingInfo";
 'use strict';
 import {AuthController} from "./controllers/auth.controller";
 import {IController} from "./controllers/controller";
 import {DataObject} from "../domain/data/dataObject";
 import {PlayerController} from "./controllers/player.controller";
+import {PositionController} from "./controllers/position.controller";
 import {RequestData} from "./requestData";
 import {Router} from "express";
+import {RoutingInfo} from "./data/routingInfo";
 import {UserController} from "./controllers/user.controller";
 
 import {createAuthStrategy} from "./auth";
@@ -20,6 +21,7 @@ export var api:Router = express.Router();
 let controllers:IController[] = [
 	getInstance( AuthController ),
 	getInstance( PlayerController ),
+	getInstance( PositionController ),
 	getInstance( UserController )
 ];
 

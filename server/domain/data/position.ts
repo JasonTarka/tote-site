@@ -13,7 +13,7 @@ export class Position extends DataObject {
 	}
 
 	get data() {
-		let data:any = this._getFieldVals;
+		let data:any = this._getFieldVals();
 		delete data.sortOrder;
 		return data;
 	}
