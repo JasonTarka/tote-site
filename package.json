@@ -54,7 +54,7 @@
     "mysql": "^2.10.0",
     "passport": "^0.3.2",
     "passport-jwt": "^1.2.1",
-    "scrypt": "^5.4.1"
+    "scrypt": "^6.0.2"
   },
   "pre-commit": [
     "lint",
