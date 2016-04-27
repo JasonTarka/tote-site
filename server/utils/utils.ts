@@ -35,6 +35,9 @@ export function clone( obj ) {
 		copy.setTime( obj.getTime() );
 		return copy;
 	}
+	if( obj instanceof Promise ) {
+		return obj; // Can't really copy promises
+	}
 	if( obj instanceof Object ) {
 		copy = new obj.constructor();
 
@@ -53,6 +56,18 @@ export function generateRandomString( maxLength:number ):string {
 
 	return crypto.randomBytes( length )
 		.toString( 'hex' );
+}
+
+export function pad( input:string, space:number ) {
+	let str = input.toString(),
+		arrLength = space - str.length + 1;
+
+	if( arrLength <= 0 ) {
+		return str;
+	}
+
+	str += new Array( arrLength ).join( ' ' );
+	return str;
 }
 
 export function setToArray<T>( set:Set<T> ):T[] {

@@ -1,5 +1,6 @@
 'use strict';
 import {clone} from "../../../server/utils/utils";
+import {pad} from "../../../server/utils/utils";
 
 describe( 'utils', () => {
 	let should = require( 'should' );
@@ -82,7 +83,18 @@ describe( 'utils', () => {
 			copy.should.deepEqual( obj );
 		} );
 
-		it( 'copied a class', () => {
+		it( 'does not copy a Promise', () => {
+			let expectedVal = 'hello',
+				obj = {
+					promise: new Promise( ( resolve ) => resolve( expectedVal ) )
+				};
+
+			let copy = clone( obj );
+			copy.should.deepEqual( obj );
+			copy.promise.should.be.fulfilledWith( expectedVal );
+		} );
+
+		it( 'copies a class', () => {
 			class TestClass {
 				private _myVal:any;
 
@@ -105,4 +117,40 @@ describe( 'utils', () => {
 			copy.myVal.should.equal( obj.myVal );
 		} );
 	} );
+
+	describe( 'string padding', () => {
+		it( 'pads an empty string', () => {
+			let expected = '             ',
+				length = expected.length;
+
+			let result = pad( '', length );
+			result.should.equal( expected );
+		} );
+
+		it( 'pads a string with spaces', () => {
+			let input = 'hello',
+				expected = input + '     ',
+				length = expected.length;
+
+			let result = pad( input, length );
+			result.should.equal( expected );
+		} );
+
+		it( 'does not pad string that is already the specified length', () => {
+			let input = 'goodbye',
+				length = input.length;
+
+			let result = pad( input, length );
+			result.should.equal( input );
+		} );
+
+		it( 'does not pad string longer than the specified length', () => {
+			let input = 'the quick brown fox jumps over the lazy dog',
+				length = input.length - 2;
+
+			let result = pad( input, length );
+			result.should.equal( input );
+		} );
+	} );
+
 } );

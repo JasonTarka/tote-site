@@ -25,7 +25,17 @@ export class DataObject {
 	/***** Methods/Properties to be overridden *****/
 
 	get data():Object {
-		return this._getFieldVals();
+		let data = _data.get( this ),
+			cloned = clone( data );
+		Object.keys( data ).forEach(
+			key => {
+				if( data[key] instanceof DataObject ) {
+					cloned[key] = data[key];
+				}
+			}
+		);
+
+		return cloned;
 	}
 
 	/**
