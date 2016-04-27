@@ -1,7 +1,8 @@
 'use strict';
-import {api} from "./routes/routes";
 import {HttpError} from "./utils/errors";
 import {NotFound} from "./utils/errors";
+
+import {setupControllers} from "./routes/routes";
 
 let express = require( 'express' ),
 	logger = require( 'morgan' ),
@@ -13,7 +14,8 @@ let app = express(),
 
 app.use( logger( 'dev' ) );
 app.use( bodyParser.json() );
-app.use( '/api', api );
+
+setupControllers( '/api', app );
 
 /* tslint:disable:no-unused-variable */
 // Handle anything that doesn't have a route
